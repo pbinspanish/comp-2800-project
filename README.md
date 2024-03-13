@@ -15,6 +15,10 @@
 		- [ ] Different background based on world height
 		- [ ] Different background based on biome
 	- [ ] Finite size
+	- [ ] Generation
+		- [ ] Biomes varied across x-axis
+		- [ ] Caves generate underground
+		- [ ] Hills/plains/plateaus above ground
 - [ ] Player
 	- [ ] Moves left / right
 	- [ ] Affected by gravity
@@ -24,3 +28,18 @@
 		- [ ] Tools?
 		- [ ] Hotbar
 			- [ ] Shows easily accessible items
+- [ ] UI
+	- [ ] Main Menu
+		- [ ] Start
+			- [ ] Select Skin
+		- [ ] Exit
+	- [ ] Inventory
+		- [ ] Grid of item stacks
+		- [ ] Can be moved between slots
+		- [ ] Shows hotbar
+	- [ ] Pause
+		- [ ] Resume
+		- [ ] Exit
+	- [ ] In-game
+		- [ ] Hotbar
+		- [ ] Player status
