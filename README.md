@@ -2,6 +2,17 @@
 > Group 8
 
 ## Assets Used
+- [ ] Links to images
+	- [ ] Icons (armour, weapons, extras)
+	https://merchant-shade.itch.io/16x16-mixed-rpg-icons
+	- [ ] Character (with all movements)
+	(image available on the shared word doc)
+	- [ ] Blocks
+	https://devilsworkshop.itch.io/big-pixel-isometric-block-pack-free-2d-sprites
+	- [ ] Main background 
+	FILL IN 
+	- [ ] Cave background
+	FILL IN
 
 ## Features
 - [ ] Camera
