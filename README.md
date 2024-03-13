@@ -24,6 +24,7 @@
 - [ ] Player
 	- [ ] Moves left / right
 	- [ ] Affected by gravity
+	- [ ] Collides with blocks
 	- [ ] Jumps one block high
 	- [ ] Inventory
 		- [ ] Holds item versions of destroyed blocks
