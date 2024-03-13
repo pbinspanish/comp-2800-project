@@ -31,6 +31,7 @@
 - [ ] UI
 	- [ ] Main Menu
 		- [ ] Start
+  			- [ ] Input Name
 			- [ ] Select Skin
 		- [ ] Exit
 	- [ ] Inventory
