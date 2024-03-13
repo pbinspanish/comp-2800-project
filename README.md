@@ -1,6 +1,8 @@
 # COMP-2800 Project
 > Group 8
 
+## Assets Used
+
 ## Features
 - [ ] Camera
 	- [ ] Scrolls in the x and y direction
@@ -28,6 +30,7 @@
 		- [ ] Tools?
 		- [ ] Hotbar
 			- [ ] Shows easily accessible items
+	- [ ] animation system to change sprites based on actions
 - [ ] UI
 	- [ ] Main Menu
 		- [ ] Start
