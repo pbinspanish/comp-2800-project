@@ -2,16 +2,17 @@ import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
 
-import java.util.Random;
+//import java.util.Random;
 
 public class GameCanvas extends Canvas implements Runnable, KeyListener {
 	// Core
 	private Thread thread;
 	private BufferStrategy bs;
+	public static Keyboard keyboard;
 
 	public static final int GAME_WIDTH = 960, GAME_HEIGHT = 540;
 
-	private Random rnd = new Random();
+	//private Random rnd = new Random();
 
 	public GameCanvas() {
 		setFocusable(true);
