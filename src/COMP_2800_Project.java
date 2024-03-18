@@ -21,9 +21,26 @@ public class COMP_2800_Project {
         GameCanvas gameCanvas = new GameCanvas();
         frame.add(gameCanvas);
 
+        // initialize player and camera
+        Player player = new Player(100, 100); // JUST EXAMPLE!! starting position
+        Camera camera = new Camera();
+
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        gameCanvas.start();
+        // game Loop!!
+        while (true) {
+            // process input (if any)
+
+            //update game state
+            player.tick();
+            camera.update(player);
+
+            //rrender
+            gameCanvas.render(player, camera);
+
+            // pause briefly to contro frame rate
+            Thread.sleep(10); // Adjust as needed for desired frame rate
+        }
     }
 }
