@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class Player extends GameObject implements Serializable {
 
-    // Animators for different player animations
+    // animators for different player animations
     private Animator idleAnimator;
     private Animator[] walkingRightAnimators;
     private Animator[] fightingAnimators;
@@ -16,7 +16,7 @@ public class Player extends GameObject implements Serializable {
     private Animator[] comingDownAnimators;
     private Animator[] lyingDownAnimators;
     
-    // Player position
+    // player position
     private float x, y;
 
     public Player(float x, float y) {
@@ -24,7 +24,7 @@ public class Player extends GameObject implements Serializable {
         this.x = x;
         this.y = y;
         
-        // load sprite sheet image
+        // load sprite sheet image, resources file 
         BufferedImage spriteSheet = null;
         try {
             spriteSheet = ImageIO.read(new File("char_blue.png"));
@@ -32,7 +32,7 @@ public class Player extends GameObject implements Serializable {
             e.printStackTrace();
         }
         
-        // initialize animators for animations
+        // initialize animators for animations!!
         
         // idle animation (first frame of the sprite sheet)
         BufferedImage[] idleFrames = {spriteSheet.getSubimage(0, 0, 64, 64)};
@@ -95,7 +95,7 @@ public class Player extends GameObject implements Serializable {
         // move the player
         move(dx, dy);
 
-        // update animations
+        // update animations!!
         
         // if character is moving right, animate walking right
         if (dx > 0) {
