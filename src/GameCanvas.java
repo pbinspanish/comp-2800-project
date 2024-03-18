@@ -9,6 +9,8 @@ public class GameCanvas extends Canvas implements Runnable, KeyListener {
 	private Thread thread;
 	private BufferStrategy bs;
 	public static Keyboard keyboard;
+	private WorldGenerator worldGenerator;
+	private int[][] worldMap;
 
 	public static final int GAME_WIDTH = 960, GAME_HEIGHT = 540;
 
@@ -16,6 +18,9 @@ public class GameCanvas extends Canvas implements Runnable, KeyListener {
 
 	public GameCanvas() {
 		setFocusable(true);
+		this.addKeyListener(this);
+		worldGenerator = new WorldGenerator();
+		worldMap = worldGenerator.getWorldMap();
 		this.addKeyListener(this);
 	}
 
@@ -68,6 +73,7 @@ public class GameCanvas extends Canvas implements Runnable, KeyListener {
 		background.fillRect(0, 0, this.getWidth(), this.getHeight());
 
 		background.dispose();
+
 
 
 		// show the buffer

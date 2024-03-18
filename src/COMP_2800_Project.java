@@ -42,5 +42,6 @@ public class COMP_2800_Project {
             // pause briefly to contro frame rate
             Thread.sleep(10); // Adjust as needed for desired frame rate
         }*/
+        gameCanvas.start();
     }
 }

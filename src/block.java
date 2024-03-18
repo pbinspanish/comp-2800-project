@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.image.*;
+import java.io.File;
 
 public class block {
     private int x;
@@ -22,23 +23,18 @@ public class block {
         // Load image based on block type
         switch (type) {
             case "GRASS":
-                return loadImageFromFile("grass.png");
+                return ImageLoader.loadImage("src/grass.png");
             case "DIRT":
-                return loadImageFromFile("dirt.png");
+                return ImageLoader.loadImage("src/dirt.png");
             case "STONE":
-                return loadImageFromFile("stone.png");
+                return ImageLoader.loadImage("src/stone.png");
             // Add cases for other block types as needed
             default:
                 return null;
         }
     }
 
-    private Image loadImageFromFile(String filename) {
-        // Load image from file
-        // This method assumes that the images are stored in the same directory as the source code
-        // You may need to adjust the path or use a different method to load images based on your project setup
-        return Toolkit.getDefaultToolkit().getImage(filename);
-    }
+
 
     public void draw(Graphics2D g) {
         // Draw the block image at the specified position
