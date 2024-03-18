@@ -6,10 +6,10 @@ public class block {
     private int y;
     private int width;
     private int height;
-    private BlockType type;
+    private String type;
     private Image image; // Image representing the block
 
-    public Block(int x, int y, int width, int height, BlockType type) {
+    public block(int x, int y, int width, int height, String type) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -21,11 +21,11 @@ public class block {
     private Image loadImage() {
         // Load image based on block type
         switch (type) {
-            case GRASS:
+            case "GRASS":
                 return loadImageFromFile("grass.png");
-            case DIRT:
+            case "DIRT":
                 return loadImageFromFile("dirt.png");
-            case STONE:
+            case "STONE":
                 return loadImageFromFile("stone.png");
             // Add cases for other block types as needed
             default:
