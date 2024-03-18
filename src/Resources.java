@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 //this can be changed fully!! Just how i implemented it in my assignment 2 :)
 public class Resources { 
     // static variables to hold different resources
