@@ -22,7 +22,16 @@ public class Camera {
 
     // method to adjust graphics rendering to simulate the camera
     public void apply(Graphics2D g2d) {
+        // Save the original transform state
+        g2d = (Graphics2D) g2d.create();
+
+        // Translate the graphics context by the camera offsets
         g2d.translate(-xOffset, -yOffset);
+
+        // Render using the transformed graphics context
+
+        // Restore the original transform state
+        g2d.dispose();
     }
 
     // getters and setters for camera offsets

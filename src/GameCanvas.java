@@ -9,18 +9,20 @@ public class GameCanvas extends Canvas implements Runnable, KeyListener {
 	private Thread thread;
 	private BufferStrategy bs;
 	public static Keyboard keyboard;
-	private WorldGenerator worldGenerator;
-	private int[][] worldMap;
+	private TerrainGenerator terrainGenerator;
+	private Block[][] worldMap;
 
 	public static final int GAME_WIDTH = 960, GAME_HEIGHT = 540;
+	public static final int BLOCK_SIZE = 16;
 
 	//private Random rnd = new Random();
 
 	public GameCanvas() {
+		setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
 		setFocusable(true);
 		this.addKeyListener(this);
-		worldGenerator = new WorldGenerator();
-		worldMap = worldGenerator.getWorldMap();
+		terrainGenerator = new TerrainGenerator(50, 50);
+		worldMap = TerrainGenerator.getWorldMap();
 		this.addKeyListener(this);
 	}
 
@@ -63,16 +65,30 @@ public class GameCanvas extends Canvas implements Runnable, KeyListener {
 	}
 
 	public void render() {
+		if (bs == null) {
+			this.createBufferStrategy(2); // Or the appropriate number of buffers
+			bs = this.getBufferStrategy();
+			return; // Return without rendering if BufferStrategy was just initialized
+		}
 		// rendering
 
 		// test background
-		Graphics2D background = (Graphics2D) bs.getDrawGraphics();
-		background.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		background.setColor(Color.CYAN);
-		background.fillRect(0, 0, this.getWidth(), this.getHeight());
+		g.setColor(Color.CYAN);
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-		background.dispose();
+		for (int y = 0; y < worldMap.length; y++) {
+			for (int x = 0; x < worldMap[y].length; x++) {
+				Image blockImage = worldMap[x][y].getImage();
+				g.drawImage(blockImage, x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
+			}
+		}
+
+
+
+		g.dispose();
 
 
 
