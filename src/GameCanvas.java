@@ -79,12 +79,32 @@ public class GameCanvas extends Canvas implements Runnable, KeyListener {
 		g.setColor(Color.CYAN);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
+		// Calculate the total width and height of the map in pixels
+		int mapWidth = worldMap[0].length * BLOCK_SIZE;
+		int mapHeight = worldMap.length * BLOCK_SIZE;
+
+		// Calculate the offset to center the map on the screen
+		int offsetX = (getWidth() - mapWidth) / 2;
+		int offsetY = (getHeight() - mapHeight) / 2;
+
+		// Render each block in the world map
 		for (int y = 0; y < worldMap.length; y++) {
 			for (int x = 0; x < worldMap[y].length; x++) {
-				Image blockImage = worldMap[x][y].getImage();
-				g.drawImage(blockImage, x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, null);
+				Image blockImage = worldMap[y][x].getImage();
+				int xPos = offsetX + x * BLOCK_SIZE;
+				int yPos = offsetY + y * BLOCK_SIZE;
+				g.drawImage(blockImage, xPos, yPos, BLOCK_SIZE, BLOCK_SIZE, null);
 			}
 		}
+
+
+
+
+
+
+
+
+
 
 
 

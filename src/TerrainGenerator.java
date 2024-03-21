@@ -6,6 +6,7 @@ public class TerrainGenerator {
     private int height;
     private PerlinNoise perlinNoise;
 
+    // Constructor to initialize TerrainGenerator with width and height
     public TerrainGenerator(int width, int height) {
         this.width = width;
         this.height = height;
@@ -15,16 +16,20 @@ public class TerrainGenerator {
         generateWorld();
     }
 
+    // Method to generate the world map
     private void generateWorld() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                worldMap[x][y] = generateBlock(x, y);
+        double scalingFactor = 0.1 / Math.max(width, height); // Adjust scaling factor based on map size
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                worldMap[y][x] = generateBlock(x, y, scalingFactor); // Note the change in indices
             }
         }
     }
 
-    private Block generateBlock(int x, int y) {
-        double terrainHeight = perlinNoise.noise(x * 0.1, y * 0.1); // Adjust the scaling factor as needed
+    // Method to generate individual blocks based on Perlin noise
+    private Block generateBlock(int x, int y, double scalingFactor) {
+        double terrainHeight = perlinNoise.noise(x * scalingFactor, y * scalingFactor);
 
         int groundLevel = 3;
 
@@ -39,7 +44,7 @@ public class TerrainGenerator {
         return new Block(blockType);
     }
 
-
+    // Method to get the generated world map
     public static Block[][] getWorldMap() {
         return worldMap;
     }

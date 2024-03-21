@@ -22,7 +22,7 @@ public class COMP_2800_Project {
         frame.add(gameCanvas);
 
         // initialize player and camera
-        //Player player = new Player(100, 100); // JUST EXAMPLE!! starting position
+      //  Player player = new Player(100, 100); // JUST EXAMPLE!! starting position
         Camera camera = new Camera(20,20);
 
         frame.setLocationRelativeTo(null);
@@ -33,7 +33,7 @@ public class COMP_2800_Project {
             // process input (if any)
 
             //update game state
-           // player.tick();
+         //  player.tick();
            // camera.update(player);
 
             //render
