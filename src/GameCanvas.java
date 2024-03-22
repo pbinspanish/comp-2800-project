@@ -10,19 +10,22 @@ public class GameCanvas extends Canvas implements Runnable, KeyListener {
 	private BufferStrategy bs;
 	public static Keyboard keyboard;
 	private TerrainGenerator terrainGenerator;
+	private Camera camera;
+	private Player player;
 	private Block[][] worldMap;
 
 	public static final int GAME_WIDTH = 960, GAME_HEIGHT = 540;
-	public static final int BLOCK_SIZE = 16;
+	public static final int BLOCK_SIZE = 32;
 
 	//private Random rnd = new Random();
 
-	public GameCanvas() {
+	public GameCanvas(Camera camera, Player player) {
 		setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
 		setFocusable(true);
 		this.addKeyListener(this);
-		terrainGenerator = new TerrainGenerator(50, 50);
-		worldMap = TerrainGenerator.getWorldMap();
+		terrainGenerator = new TerrainGenerator(100, 100, camera);
+		this.camera = camera;
+		this.player = player;
 		this.addKeyListener(this);
 	}
 
@@ -79,31 +82,9 @@ public class GameCanvas extends Canvas implements Runnable, KeyListener {
 		g.setColor(Color.CYAN);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-		// Calculate the total width and height of the map in pixels
-		int mapWidth = worldMap[0].length * BLOCK_SIZE;
-		int mapHeight = worldMap.length * BLOCK_SIZE;
 
-		// Calculate the offset to center the map on the screen
-		int offsetX = (getWidth() - mapWidth) / 2;
-		int offsetY = (getHeight() - mapHeight) / 2;
-
-		// Render each block in the world map
-		for (int y = 0; y < worldMap.length; y++) {
-			for (int x = 0; x < worldMap[y].length; x++) {
-				Image blockImage = worldMap[y][x].getImage();
-				int xPos = offsetX + x * BLOCK_SIZE;
-				int yPos = offsetY + y * BLOCK_SIZE;
-				g.drawImage(blockImage, xPos, yPos, BLOCK_SIZE, BLOCK_SIZE, null);
-			}
-		}
-
-
-
-
-
-
-
-
+		terrainGenerator.renderWorld(g);
+		player.render(g);
 
 
 
