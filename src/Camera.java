@@ -3,10 +3,14 @@ import java.awt.Graphics2D;
 public class Camera {
     private float xOffset;
     private float yOffset;
+    private int height;
+    private int width;
 
-    public Camera(float xOffset, float yOffset) {
+    public Camera(float xOffset, float yOffset, int height, int width) {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
+        this.height = height;
+        this.width = width;
     }
 
     // method to update the camera position to follow the player
@@ -49,5 +53,13 @@ public class Camera {
 
     public void setYOffset(float yOffset) {
         this.yOffset = yOffset;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }
