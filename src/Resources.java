@@ -8,7 +8,7 @@ public class Resources {
     // load resources in a static initializer block
     static {
         //try {
-            spriteSheet = new SpriteSheet("char_blue.png", 8, 8, 64, 64);
+            spriteSheet = new SpriteSheet("resources/char_blue.png", 8, 8, 64, 64);
         /* } catch (IOException e) {
             e.printStackTrace();
         }*/

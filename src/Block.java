@@ -23,15 +23,15 @@ public class Block implements Serializable {
     public Image getImage() {
         switch (type){
             case "DIRT":
-               image = ImageLoader.loadImage("src/dirt.png");
+               image = ImageLoader.loadImage("resources/dirt.png");
                image = ImageLoader.resizeImage(image, 32, 32);
                break;
             case "STONE":
-                image = ImageLoader.loadImage("src/stone.png");
+                image = ImageLoader.loadImage("resources/stone.png");
                 image = ImageLoader.resizeImage(image, 32, 32);
                 break;
             case "GRASS":
-                image = ImageLoader.loadImage("src/grass.png");
+                image = ImageLoader.loadImage("resources/grass.png");
                 image = ImageLoader.resizeImage(image, 32, 32);
             break;
         }

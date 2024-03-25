@@ -25,7 +25,7 @@ public class Player extends GameObject implements Serializable {
 
         BufferedImage spriteSheet = null;
         try {
-            spriteSheet = ImageIO.read(new File("src/char_blue.png"));
+            spriteSheet = ImageIO.read(new File("resources/char_blue.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
