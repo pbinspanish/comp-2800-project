@@ -17,14 +17,14 @@ public class COMP_2800_Project {
         frame.setSize(GameCanvas.GAME_WIDTH, GameCanvas.GAME_HEIGHT);
         frame.setLocationRelativeTo(null);
 
-        // GameCanvas
-        GameCanvas gameCanvas = new GameCanvas();
-        frame.add(gameCanvas);
+
 
         // initialize player and camera
-      //  Player player = new Player(100, 100); // JUST EXAMPLE!! starting position
-        Camera camera = new Camera(20,20);
-
+       Player player = new Player(100, 100); // JUST EXAMPLE!! starting position
+        Camera camera = new Camera(100,100, frame.getHeight(), frame.getWidth());
+        // GameCanvas
+        GameCanvas gameCanvas = new GameCanvas(camera, player);
+        frame.add(gameCanvas);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 

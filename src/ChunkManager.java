@@ -3,19 +3,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChunkManager {
-    private Map<String, Chunk> loadedChunks;
 
-    public ChunkManager() {
+    private HashMap<String, Chunk> loadedChunks;
+    private Player player;
+
+    public ChunkManager(Player player) {
         this.loadedChunks = new HashMap<>();
+        this.player = player;
     }
 
     public void saveChunk(Chunk chunk) {
+        String chunkID = chunk.getId();
         try {
-            FileOutputStream fileOut = new FileOutputStream("chunks/" + chunk.getId() + ".ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(chunk);
-            out.close();
-            fileOut.close();
+           FileOutputStream fileOutputStream = new FileOutputStream("chunks/" + chunkID + ".ser");
+           ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+           objectOutputStream.writeObject(chunk);
+
+           objectOutputStream.close();
+           fileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -30,8 +35,22 @@ public class ChunkManager {
             in.close();
             fileIn.close();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+          return null;
         }
         return chunk;
     }
+
+
+
+    public void loadVisibleChunks(int x, int y) {
+        String id = x + "_" + y;
+        Chunk visibleChunk = loadChunk(id);
+        if (visibleChunk != null) {
+            loadedChunks.put(id, visibleChunk);
+        }
+    }
+    public HashMap<String, Chunk> getLoadedChunks() {
+        return loadedChunks;
+    }
+
 }

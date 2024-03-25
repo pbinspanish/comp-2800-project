@@ -23,9 +23,10 @@ public class GameCanvas extends Canvas implements Runnable, KeyListener {
 		setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
 		setFocusable(true);
 		this.addKeyListener(this);
-		terrainGenerator = new TerrainGenerator(100, 100, camera);
+		terrainGenerator = new TerrainGenerator(camera, player);
 		this.camera = camera;
 		this.player = player;
+		this.keyboard = new Keyboard();
 		this.addKeyListener(this);
 	}
 
@@ -83,7 +84,7 @@ public class GameCanvas extends Canvas implements Runnable, KeyListener {
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
 
-		terrainGenerator.renderWorld(g);
+		terrainGenerator.generateWorld(g);
 		player.render(g);
 
 
