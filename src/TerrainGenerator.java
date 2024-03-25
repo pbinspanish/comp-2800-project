@@ -46,7 +46,7 @@ public class TerrainGenerator {
 
         for(int i = 0; i< Chunk.CHUNK_SIZE; i++){
             for(int j=0; j<Chunk.CHUNK_SIZE; j++){
-               String blockType = generateBlock();
+               String blockType;
                 if (j == 0 ) {
                     blockType = "GRASS"; // Top level blocks are grass
                 } else if(j<=4) {
@@ -62,30 +62,6 @@ public class TerrainGenerator {
         return new Chunk(chunkID, chunkX, chunkY, blocks);
     }
 
-
-    private String generateBlock() { //set randomly for now
-        double dirtProb = 0.4;
-        double stoneProb = 0.3;
-        double grassProb = 0.2;
-
-        // Generate a random value between 0 and 1
-        double rand = Math.random();
-
-        // Check probabilities to determine block type
-        if (rand < dirtProb) {
-            return "DIRT";
-        } else if (rand < dirtProb + stoneProb) {
-            return "STONE";
-        } else {
-            // Ensure grass appears only at the top level
-            // Adjust this logic based on your world generation requirements
-            if (player.getY() <= 0) {
-                return "GRASS";
-            } else {
-                return "DIRT"; // For other levels, default to dirt
-            }
-        }
-    }
 
 
     // Method to render the visible portion of the world map
