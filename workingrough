@@ -1,0 +1,104 @@
+/*
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Game extends JPanel implements KeyListener {
+    private Image background;
+    private Image spriteSheet;
+    private int panelWidth;
+    private int panelHeight;
+    private int spriteWidth = 256; // Enlarged size
+    private int spriteHeight = 256; // Enlarged size
+    private float playerX; // Player X position
+    private float playerY; // Player Y position
+    private float speed = 5; // Player movement speed
+    private boolean isFacingRight = true; // Player facing direction
+    private int currentAnimationFrame = 0;
+    private int numberOfFrames = 8; // Number of frames in the sprite sheet
+
+    public Game(int panelWidth, int panelHeight) {
+        this.panelWidth = panelWidth;
+        this.panelHeight = panelHeight;
+
+        background = new ImageIcon("background.png").getImage().getScaledInstance(panelWidth, panelHeight, Image.SCALE_DEFAULT);
+        spriteSheet = new ImageIcon("char_blue.png").getImage().getScaledInstance(spriteWidth * numberOfFrames, spriteHeight * 3, Image.SCALE_DEFAULT);
+        playerX = panelWidth / 2; // Initial X position of the player
+        playerY = panelHeight - spriteHeight; // Initial Y position of the player
+        setPreferredSize(new Dimension(panelWidth, panelHeight));
+        setFocusable(true);
+        addKeyListener(this);
+
+        Timer timer = new Timer(1000 / 60, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                repaint();
+            }
+        });
+        timer.start();
+    }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+
+        // Draw background
+        g2d.drawImage(background, 0, 0, null);
+
+        // Draw player
+        if (isFacingRight) {
+            g2d.drawImage(spriteSheet, (int) playerX, (int) playerY, (int) playerX + spriteWidth, (int) playerY + spriteHeight,
+                    currentAnimationFrame * spriteWidth, spriteHeight, (currentAnimationFrame + 1) * spriteWidth, spriteHeight * 2, null);
+        } else {
+            g2d.drawImage(spriteSheet, (int) playerX + spriteWidth, (int) playerY, (int) playerX, (int) playerY + spriteHeight,
+                    currentAnimationFrame * spriteWidth, spriteHeight, (currentAnimationFrame + 1) * spriteWidth, spriteHeight * 2, null);
+        }
+    }
+
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_LEFT) {
+            isFacingRight = false;
+            playerX -= speed; // Move left
+            currentAnimationFrame = (currentAnimationFrame + 1) % numberOfFrames; // Animate
+        }
+        if (key == KeyEvent.VK_RIGHT) {
+            isFacingRight = true;
+            playerX += speed; // Move right
+            currentAnimationFrame = (currentAnimationFrame + 1) % numberOfFrames; // Animate
+        }
+        if (key == KeyEvent.VK_SPACE) {
+            // Handle space bar press for fighting
+        }
+        if (key == KeyEvent.VK_SHIFT) {
+            // Handle shift key press for running
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT) {
+            currentAnimationFrame = 0; // Reset animation frame when the movement key is released
+        }
+    }
+
+    public void keyTyped(KeyEvent e) {}
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                int panelWidth = (int) screenSize.getWidth();
+                int panelHeight = (int) screenSize.getHeight();
+
+                JFrame frame = new JFrame("Game");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setResizable(false);
+                frame.getContentPane().add(new Game(panelWidth, panelHeight));
+                frame.pack();
+                frame.setVisible(true);
+            }
+        });
+    }
+}
+*/
+
