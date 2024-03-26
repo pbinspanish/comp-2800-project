@@ -1,27 +1,33 @@
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.*;
 
+///
+/// Stores and manages all objects in the game.
+///
 public class GameManager {
-	
-	public LinkedList<GameObject> gameObjects = new LinkedList<GameObject>();
 
-	public void tick() {
-		// update ALL game objects
-        for (GameObject gameObject : gameObjects) gameObject.tick();
-	}
-	
-	public void render(Graphics2D g2d) {
-		// render ALL game objects
-        for (GameObject gameObject : gameObjects) gameObject.render(g2d);
-	}
+    public ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
 
-	public void addGameObject(GameObject gameObject) {
-        // add a game object TO list
-		gameObjects.add(gameObject);
-	}
+    public void tick(InputManager im) {
+        // tick() all GameObjects
+        for (GameObject gameObject : gameObjects) {
+            gameObject.tick(im);
+        }
+    }
 
-	public void removeGameObject(GameObject gameObject) {
-        // remove a game object FROM list
-		gameObjects.remove(gameObject);
-	}
+    public void render(Graphics2D g2d) {
+        // render() all GameObjects
+        for (GameObject gameObject : gameObjects) {
+            gameObject.render(g2d);
+        }
+    }
+
+    public void addGameObject(GameObject gameObject) {
+        gameObjects.add(gameObject);
+        Collections.sort(gameObjects);
+    }
+
+    public void removeGameObject(GameObject gameObject) {
+        gameObjects.remove(gameObject);
+    }
 }

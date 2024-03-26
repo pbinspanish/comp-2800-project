@@ -1,126 +1,87 @@
 import java.awt.*;
 import java.awt.image.*;
-import java.io.Serializable;
+import java.util.Arrays;
+
 import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
-import java.awt.geom.AffineTransform;
+import java.io.*;
 
-public class Player extends GameObject implements Serializable {
+///
+/// Manages the state of the Player character.
+///
+public class Player extends GameObject {
+    public static final int PLAYER_WIDTH = 56, PLAYER_HEIGHT = 56;
 
-    private Animator idleAnimator;
-    private Animator[] walkingRightAnimators;
-    private Animator[] fightingAnimators;
-    private Animator[] runningRightAnimators;
-    private Animator[] jumpingUpAnimators;
-    private Animator[] comingDownAnimators;
-    private Animator[] lyingDownAnimators;
+    private PlayerAnimator pa;
+    private int movementSpeed = 10;
+    private int dir = 0;
 
-    private float x, y;
+    public Player(int x, int y, int renderPriority) {
+        super(x, y, PLAYER_WIDTH, PLAYER_HEIGHT, renderPriority);
 
-    public Player(float x, float y) {
-        super(x, y, 64, 64);
-        this.x = x;
-        this.y = y;
-
-        BufferedImage spriteSheet = null;
-        try {
-            spriteSheet = ImageIO.read(new File("resources/char_blue.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        idleAnimator = extractFrames(spriteSheet, 0, 0, 6, 1, 56, 56);
-        walkingRightAnimators = new Animator[]{extractFrames(spriteSheet, 0, 56, 6, 1, 56, 56)};
-        fightingAnimators = new Animator[]{extractFrames(spriteSheet, 0, 112, 6, 1, 56, 56)};
-        runningRightAnimators = new Animator[]{extractFrames(spriteSheet, 0, 168, 8, 1, 56, 56)};
-        jumpingUpAnimators = new Animator[]{extractFrames(spriteSheet, 0, 224, 8, 1, 56, 56)};
-        comingDownAnimators = new Animator[]{extractFrames(spriteSheet, 0, 280, 8, 1, 56, 56)};
-        lyingDownAnimators = new Animator[]{extractFrames(spriteSheet, 0, 336, 4, 1, 56, 56)};
-    }
-
-    private Animator extractFrames(BufferedImage spriteSheet, int startX, int startY, int framesCount, int rows, int frameWidth, int frameHeight) {
-        BufferedImage[] frames = new BufferedImage[framesCount];
-        for (int i = 0; i < framesCount; i++) {
-            frames[i] = spriteSheet.getSubimage(startX + i * frameWidth, startY, frameWidth, frameHeight);
-        }
-        return new Animator(frames, 0, 5);
+        pa = setupPlayerAnimator();
     }
 
     @Override
-    public void tick() {
-        float dx = 0, dy = 0;
-        if (GameCanvas.keyboard.left) {
-            dx = -1;
-        } else if (GameCanvas.keyboard.right) {
-            dx = 1;
-        }
-        move(dx, dy);
+    public void tick(InputManager im) {
+        // move based on the direction and sync with the current input
+        this.dir = im.dir;
 
-        if (dx > 0) {
-            animateWalkingRight();
-        } else if (dx < 0) {
-            animateWalkingRight(true);
-        } else {
-            idleAnimator.tick();
+        switch (dir) {
+            case 0:
+                break;
+            default:
+                move(dir * movementSpeed, 0);
+                break;
         }
     }
 
     @Override
     public void render(Graphics2D g2d) {
-        if (GameCanvas.keyboard.right || GameCanvas.keyboard.left) {
-            g2d.drawImage(walkingRightAnimators[0].currentFrame, (int) x, (int) y, (int) width, (int) height, null);
-        } else {
-            g2d.drawImage(idleAnimator.currentFrame, (int) x, (int) y, (int) width, (int) height, null);
+        g2d.drawImage(pa.getCurrentFrame(), x, y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+    }
+
+    public void move(int dx, int dy) {
+        x += dx;
+        y += dy;
+    }
+
+    private BufferedImage[] gatherSprites() {
+        BufferedImage[] sprites = new BufferedImage[56];
+        
+        // Load Sprites
+        try {
+            int currentSprite = 0;
+            BufferedImage spriteAtlas = ImageIO.read(new File("resources/char_blue.png"));
+            for (int i = 0; i < 7; i++) {
+                for (int j = 0; j < 8; j++) {
+                    sprites[currentSprite] = spriteAtlas.getSubimage(j * 56, i * 56, 56, 56);
+                    currentSprite++;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }
 
-    @Override
-    public Rectangle rect() {
-        return new Rectangle((int) x + 10, (int) y + 10, (int) width - 20, (int) height - 20);
+        return sprites;
     }
+    
+    private PlayerAnimator setupPlayerAnimator() {
+        BufferedImage[] sprites = gatherSprites();
 
-    private void animateWalkingRight() {
-        animateWalkingRight(false);
-    }
+        // Grab Sprites
+        BufferedImage[] idleSprites = Arrays.copyOfRange(sprites, 0, 5);
+        BufferedImage[] attackingSprites = Arrays.copyOfRange(sprites, 8, 13);
+        BufferedImage[] runningSprites = Arrays.copyOfRange(sprites, 16, 23);
+        BufferedImage[] jumpingSprites = Arrays.copyOfRange(sprites, 24, 31);
+        BufferedImage[] fallingSprites = Arrays.copyOfRange(sprites, 32, 39);
 
-    private void animateWalkingRight(boolean invert) {
-        walkingRightAnimators[0].tick();
-        if (invert) {
-            walkingRightAnimators[0].currentFrame = flipImage(walkingRightAnimators[0].currentFrame);
-        }
-    }
+        // Create Animations
+        Animation idleAnimation = new Animation(idleSprites);
+        Animation attackingAnimation = new Animation(attackingSprites);
+        Animation runningAnimation = new Animation(runningSprites);
+        Animation jumpingAnimation = new Animation(jumpingSprites);
+        Animation fallingAnimation = new Animation(fallingSprites);
 
-    private BufferedImage flipImage(BufferedImage image) {
-        BufferedImage flippedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        AffineTransform transform = new AffineTransform();
-        transform.scale(-1, 1);
-        transform.translate(-image.getWidth(), 0);
-        AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-        op.filter(image, flippedImage);
-        return flippedImage;
-    }
-
-    public void move(float dx, float dy) {
-        float newX = x + dx;
-        float newY = y + dy;
-        x = newX;
-        y = newY;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
+        return new PlayerAnimator(new Animation[] { idleAnimation, attackingAnimation, runningAnimation, jumpingAnimation, fallingAnimation }, 0);
     }
 }

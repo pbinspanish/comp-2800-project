@@ -1,6 +1,6 @@
 import java.awt.Graphics2D;
 
-public class Camera {
+public class Camera extends GameObject {
     private float xOffset;
     private float yOffset;
     private int height;
@@ -16,8 +16,8 @@ public class Camera {
     // method to update the camera position to follow the player
     public void update(Player player) {
         // Calculate the desired center of the camera based on player position
-        float targetX = player.getX() - (GameCanvas.GAME_WIDTH / 2);
-        float targetY = player.getY() - (GameCanvas.GAME_HEIGHT / 2);
+        float targetX = player.x - (GameCanvas.GAME_WIDTH / 2);
+        float targetY = player.y - (GameCanvas.GAME_HEIGHT / 2);
 
         // update camera offsets to center the player
         xOffset = targetX;
