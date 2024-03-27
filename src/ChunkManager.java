@@ -4,16 +4,17 @@ import java.util.Map;
 
 public class ChunkManager {
 
-    private HashMap<String, Chunk> loadedChunks;
-    private Player player;
+    public ChunkManager() {
 
-    public ChunkManager(Player player) {
-        this.loadedChunks = new HashMap<>();
-        this.player = player;
     }
 
+    /**
+     * Method to save chunk.
+     *
+     * @param chunk to be saved
+     */
     public void saveChunk(Chunk chunk) {
-        String chunkID = chunk.getId();
+        String chunkID = chunk.getChunkID();
         try {
            FileOutputStream fileOutputStream = new FileOutputStream("chunks/" + chunkID + ".ser");
            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
@@ -26,6 +27,12 @@ public class ChunkManager {
         }
     }
 
+    /**
+     * Method to load chunk at specified ID.
+     *
+     * @param chunkId of chunk to be loaded
+     * @return loaded chunk
+     */
     public Chunk loadChunk(String chunkId) {
         Chunk chunk = null;
         try {
@@ -40,17 +47,5 @@ public class ChunkManager {
         return chunk;
     }
 
-
-
-    public void loadVisibleChunks(int x, int y) {
-        String id = x + "_" + y;
-        Chunk visibleChunk = loadChunk(id);
-        if (visibleChunk != null) {
-            loadedChunks.put(id, visibleChunk);
-        }
-    }
-    public HashMap<String, Chunk> getLoadedChunks() {
-        return loadedChunks;
-    }
 
 }

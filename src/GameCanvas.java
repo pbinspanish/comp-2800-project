@@ -51,7 +51,7 @@ public class GameCanvas extends Canvas implements Runnable {
         gm.addGameObject(camera);
 
         // Initialize Terrain Generator
-        terrainGenerator = new TerrainGenerator(camera, player);
+        terrainGenerator = new TerrainGenerator(player);
         gm.addGameObject(terrainGenerator);
     }
 

@@ -1,23 +1,23 @@
 import java.io.Serializable;
 
 public class Chunk implements Serializable {
-    public static final int CHUNK_SIZE = 100;
+    public static final int CHUNK_SIZE = 50;
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    private String chunkID;
     private int x; // X coordinate of the chunk
     private int y; // Y coordinate of the chunk
     private Block[][] blocks;
 
-    public Chunk(String id, int x, int y, Block[][] blocks) {
-        this.id = id;
+    public Chunk(String chunkID, int x, int y, Block[][] blocks) {
+        this.chunkID = chunkID;
         this.x = x;
         this.y = y;
         this.blocks = blocks;
     }
 
-    public String getId() {
-        return id;
+    public String getChunkID() {
+        return chunkID;
     }
 
     public int getX() {
