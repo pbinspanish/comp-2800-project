@@ -33,7 +33,10 @@ public class Block implements Serializable {
             case "GRASS":
                 image = ImageLoader.loadImage("resources/grass.png");
                 image = ImageLoader.resizeImage(image, 32, 32);
-            break;
+                break;
+            default:
+                image = null;
+                break;
         }
         return image;
     }

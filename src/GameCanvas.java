@@ -18,13 +18,9 @@ public class GameCanvas extends Canvas implements Runnable {
     private Background bg;
 
     // Logic
-    public static final int BLOCK_SIZE = 32;
-
-
     private TerrainGenerator terrainGenerator;
     private Camera camera;
     private Player player;
-    private Block[][] worldMap;
 
 
     public GameCanvas() {
@@ -43,7 +39,7 @@ public class GameCanvas extends Canvas implements Runnable {
         gm.addGameObject(bg);
 
         // Initialize Player
-        player = new Player(100, 100, 10000);
+        player = new Player(290, 290, 10000);
         gm.addGameObject(player);
 
         // Initialize Camera
@@ -107,9 +103,10 @@ public class GameCanvas extends Canvas implements Runnable {
          * DRAW
          */
 
-        // render() all GameObjects
-        gm.render(g2d);
 
+        // render() all GameObjects
+
+        gm.render(g2d);
         // terrainGenerator.generateWorld(g2d);
         // player.render(g2d);
 

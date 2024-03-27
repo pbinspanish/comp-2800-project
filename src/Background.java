@@ -10,7 +10,7 @@ public class Background extends GameObject {
 	
 	@Override
 	public void render(Graphics2D g2d) {
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(Color.CYAN);
         g2d.fillRect(0, 0, this.width, this.height);
 	}
 }

@@ -2,8 +2,9 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class TerrainGenerator extends GameObject {
-    private final int width = 1280;
-    private final int height = 720;
+    private final int WIDTH = 1280;
+    private final int HEIGHT = 720;
+    private final int GROUND_LEVEL = 10;
 
     private ChunkManager chunkManager;
     public final int BLOCK_SIZE = 32;
@@ -64,9 +65,12 @@ public class TerrainGenerator extends GameObject {
             for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
                 String blockType;
 
-                if (j == 0) {// Top level blocks are grass
+                if (j == GROUND_LEVEL) {// Top level blocks are grass
                     blockType = "GRASS";
-                } else if (j <= 4) { // Blocks between level 1 and 4 are Dirt
+                } else if(j < GROUND_LEVEL){
+                    blockType = "AIR";
+                }
+                else if (j < GROUND_LEVEL + 4) { // Blocks between level 1 and 4 are Dirt
                     blockType = "DIRT";
                 } else { // Otherwise blocks are stone
                     blockType = "STONE";
@@ -93,9 +97,11 @@ public class TerrainGenerator extends GameObject {
 
                 // Retrieve the image for the block
                 Image blockImage = blocks[i][j].getImage();
+                if(blocks[i][j].getType()!="AIR") {
+                    // Draw the block image on the screen
+                    g2d.drawImage(blockImage, blockX, blockY, null);
+                }
 
-                // Draw the block image on the screen
-                g2d.drawImage(blockImage, blockX, blockY, null);
             }
         }
     }
