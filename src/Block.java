@@ -1,8 +1,4 @@
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.*;
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 
 public class Block implements Serializable {
@@ -20,7 +16,8 @@ public class Block implements Serializable {
         return type;
     }
 
-    public Image getImage() {
+
+    public BufferedImage getImage() {
         switch (type){
             case "DIRT":
                image = ImageLoader.loadImage("resources/dirt.png");

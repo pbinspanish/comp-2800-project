@@ -1,11 +1,13 @@
 import java.io.*;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.Map;
 
 public class ChunkManager {
+    HashMap<String, Chunk> loadedChunks;
 
     public ChunkManager() {
-
+        loadedChunks = new HashMap<>();
     }
 
     /**
@@ -30,13 +32,13 @@ public class ChunkManager {
     /**
      * Method to load chunk at specified ID.
      *
-     * @param chunkId of chunk to be loaded
+     * @param chunkID of chunk to be loaded
      * @return loaded chunk
      */
-    public Chunk loadChunk(String chunkId) {
+    public Chunk loadChunk(String chunkID) {
         Chunk chunk = null;
         try {
-            FileInputStream fileIn = new FileInputStream("chunks/" + chunkId + ".ser");
+            FileInputStream fileIn = new FileInputStream("chunks/" + chunkID + ".ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);
             chunk = (Chunk) in.readObject();
             in.close();
@@ -44,7 +46,16 @@ public class ChunkManager {
         } catch (IOException | ClassNotFoundException e) {
           return null;
         }
+        loadedChunks.put(chunkID, chunk);
         return chunk;
+    }
+    public void unloadChunk(String chunkID){
+        loadedChunks.remove(chunkID);
+    }
+
+
+    public boolean isLoaded(String chunkID) {
+        return loadedChunks.containsKey(chunkID);
     }
 
 
