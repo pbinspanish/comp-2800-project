@@ -8,6 +8,8 @@ public class COMP_2800_Project {
     public static void main(String[] args) throws Exception {
         // avoid frame flicker on manual resize
         System.setProperty("sun.awt.noerasebackground", "true");
+        // enable opengl for hardware acceleration
+        System.setProperty("sun.java2d.opengl", "True");
 
         // Variables
         String appTitle = "COMP-2800 Game Project";

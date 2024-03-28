@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 public class TerrainGenerator extends GameObject {
@@ -7,12 +8,14 @@ public class TerrainGenerator extends GameObject {
     private final int GROUND_LEVEL = 10;
 
     private ChunkManager chunkManager;
+    private ImageLoader imageLoader;
     public final int BLOCK_SIZE = 32;
     private Player player;
 
 
     public TerrainGenerator(Player player) {
         chunkManager = new ChunkManager();
+        imageLoader = new ImageLoader();
         this.player = player;
     }
 
@@ -89,19 +92,19 @@ public class TerrainGenerator extends GameObject {
      */
     public void renderWorld(Graphics2D g2d, Chunk chunk) {
         Block[][] blocks = chunk.getBlocks();
-
+        
         for (int i = 0; i < Chunk.CHUNK_SIZE; i++) {
             for (int j = 0; j < Chunk.CHUNK_SIZE; j++) {
                 int blockX = i * BLOCK_SIZE;
                 int blockY = j * BLOCK_SIZE;
-
+                
                 // Retrieve the image for the block
-                Image blockImage = blocks[i][j].getImage();
-                if(blocks[i][j].getType()!="AIR") {
+                BufferedImage blockImage = imageLoader.getBlockSprite(blocks[i][j].getType());
+                if (blocks[i][j].getType() != "AIR") {
                     // Draw the block image on the screen
                     g2d.drawImage(blockImage, blockX, blockY, null);
                 }
-
+                
             }
         }
     }
