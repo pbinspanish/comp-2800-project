@@ -44,7 +44,7 @@ public class Background extends GameObject {
 	@Override
 	public void tick(InputManager im) {
 		for (int i = 0; i < scrollOffsets.length; i++) {
-			if (scrollOffsets[i] >= this.width) {
+			if (scrollOffsets[i] >= this.width || scrollOffsets[i] < 0 - this.width) {
 				scrollOffsets[i] = 0;
 			}
 			else {
