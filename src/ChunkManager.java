@@ -4,10 +4,13 @@ import java.util.UUID;
 import java.util.Map;
 
 public class ChunkManager {
-    HashMap<String, Chunk> loadedChunks;
+    public static HashMap<String, Chunk> loadedChunks;
+    private final String DIRECTORY_PATH = "chunks/";
+    private final String FILE_TYPE = ".ser";
 
     public ChunkManager() {
         loadedChunks = new HashMap<>();
+        createChunkDir();
     }
 
     /**
@@ -18,7 +21,7 @@ public class ChunkManager {
     public void saveChunk(Chunk chunk) {
         String chunkID = chunk.getChunkID();
         try {
-           FileOutputStream fileOutputStream = new FileOutputStream("chunks/" + chunkID + ".ser");
+           FileOutputStream fileOutputStream = new FileOutputStream(DIRECTORY_PATH + chunkID + FILE_TYPE);
            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
            objectOutputStream.writeObject(chunk);
 
@@ -38,7 +41,7 @@ public class ChunkManager {
     public Chunk loadChunk(String chunkID) {
         Chunk chunk = null;
         try {
-            FileInputStream fileIn = new FileInputStream("chunks/" + chunkID + ".ser");
+            FileInputStream fileIn = new FileInputStream(DIRECTORY_PATH + chunkID + FILE_TYPE);
             ObjectInputStream in = new ObjectInputStream(fileIn);
             chunk = (Chunk) in.readObject();
             in.close();
@@ -48,6 +51,12 @@ public class ChunkManager {
         }
         loadedChunks.put(chunkID, chunk);
         return chunk;
+    }
+    private void createChunkDir(){
+        File directory = new File(DIRECTORY_PATH);
+        if(!(directory.exists())){
+            directory.mkdirs();
+        }
     }
     public void unloadChunk(String chunkID){
         loadedChunks.remove(chunkID);

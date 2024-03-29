@@ -7,13 +7,8 @@ import java.util.Random;
 public class TerrainGenerator extends GameObject {
     private final int WIDTH = 1280;
     private final int HEIGHT = 720;
-    private final int GROUND_LEVEL = 10;
-    private Random random = new Random(System.currentTimeMillis());
-
-
     private ChunkManager chunkManager;
     private ImageLoader imageLoader;
-    public final int BLOCK_SIZE = 32;
     private Player player;
 
 
@@ -35,74 +30,15 @@ public class TerrainGenerator extends GameObject {
 
 
     /**
-     * Generates chunks based on player position
-     *
-     * @return Generated or loaded chunk
-     */
-
-
-    /**
-     * Creates new chunk at specified coordinates, with specified ID.
-     *
-     * @param chunkX The x coordinate of the chunk
-     * @param chunkY The y coordinate of the chunk
-     * @param chunkID The ID of the chunk
-     * @return The newly created chunk
-     */
-    private Chunk createNewChunk(int chunkX, int chunkY, String chunkID) {
-        Block[][] blocks = new Block[Chunk.CHUNK_SIZE_X][Chunk.CHUNK_SIZE_Y];
-
-        for (int i = 0; i < Chunk.CHUNK_SIZE_X; i++) {
-            for (int j = 0; j < Chunk.CHUNK_SIZE_Y; j++) {
-                String blockType;
-
-                if (j == GROUND_LEVEL) {// Top level blocks are grass
-                    blockType = "GRASS";
-                } else if(j < GROUND_LEVEL){
-                    blockType = "AIR";
-                }
-                else if (j < GROUND_LEVEL + 6) { // Blocks between level 1 and 6 are Dirt
-                    blockType = "DIRT";
-                } else { // Otherwise, blocks are stone or random ore
-                    blockType = getRandomBlock();
-                }
-                blocks[i][j] = new Block(blockType);
-            }
-        }
-        return new Chunk(chunkID, chunkX, chunkY, blocks);
-    }
-
-    private String getRandomBlock() {
-        double randomNumber = random.nextDouble(); // Generates a random number between 0 (inclusive) and 1 (exclusive)
-        double stoneProb = 0.94;   // Probability of stone blocks (94%)
-        double ironProb = 0.03;    // Probability of iron ore (3%)
-        double goldProb = 0.02;    // Probability of gold ore (2%)
-        double diamondProb = 0.01; // Probability of diamond ore (1%)
-
-        // Check the probability ranges and return the corresponding block type
-        if (randomNumber < stoneProb) {
-            return "STONE";
-        } else if (randomNumber < stoneProb + ironProb) {
-            return "IRON_ORE";
-        } else if(randomNumber < stoneProb + ironProb + goldProb){
-            return "GOLD_ORE";
-        }
-        else {
-            return "DIAMOND_ORE";
-        }
-    }
-
-
-    /**
      * Renders chunks that are visible to the player
      * @param g2d
      */
     public void renderVisibleChunks(Graphics2D g2d) {
         // Calculate the range of chunk coordinates corresponding to the visible area
-        int startX = (int) Math.floor((double) (player.x - WIDTH / 2) / (Chunk.CHUNK_SIZE_X * BLOCK_SIZE));
-        int endX = (int) Math.ceil((double) (player.x + WIDTH / 2) / (Chunk.CHUNK_SIZE_X * BLOCK_SIZE));
-        int startY = (int) Math.floor((double) (player.y - HEIGHT / 2) / (Chunk.CHUNK_SIZE_Y * BLOCK_SIZE));
-        int endY = (int) Math.ceil((double) (player.y + HEIGHT / 2) / (Chunk.CHUNK_SIZE_Y * BLOCK_SIZE));
+        int startX = (int) Math.floor((double) (player.x - WIDTH / 2) / (Chunk.CHUNK_SIZE_X * Block.BLOCK_SIZE));
+        int endX = (int) Math.ceil((double) (player.x + WIDTH / 2) / (Chunk.CHUNK_SIZE_X * Block.BLOCK_SIZE));
+        int startY = (int) Math.floor((double) (player.y - HEIGHT / 2) / (Chunk.CHUNK_SIZE_Y * Block.BLOCK_SIZE));
+        int endY = (int) Math.ceil((double) (player.y + HEIGHT / 2) / (Chunk.CHUNK_SIZE_Y * Block.BLOCK_SIZE));
 
         // Iterate over the range of chunk coordinates and render each chunk
         for (int x = startX; x <= endX; x++) {
@@ -128,14 +64,14 @@ public class TerrainGenerator extends GameObject {
         Block[][] blocks = chunk.getBlocks();
 
         // Calculate the starting position of the chunk on the screen
-        int startX = chunkX * Chunk.CHUNK_SIZE_X * BLOCK_SIZE;
-        int startY = chunkY * Chunk.CHUNK_SIZE_Y * BLOCK_SIZE;
+        int startX = chunkX * Chunk.CHUNK_SIZE_X * Block.BLOCK_SIZE;
+        int startY = chunkY * Chunk.CHUNK_SIZE_Y * Block.BLOCK_SIZE;
 
         for (int i = 0; i < Chunk.CHUNK_SIZE_X; i++) {
             for (int j = 0; j < Chunk.CHUNK_SIZE_Y; j++) {
                 // Calculate the position of each block within the chunk
-                int blockX = startX + i * BLOCK_SIZE;
-                int blockY = startY + j * BLOCK_SIZE;
+                int blockX = startX + i * Block.BLOCK_SIZE;
+                int blockY = startY + j * Block.BLOCK_SIZE;
 
                 // Retrieve the image for the block
                 BufferedImage blockImage = imageLoader.getBlockSprite(blocks[i][j].getType());
@@ -153,10 +89,10 @@ public class TerrainGenerator extends GameObject {
 
     private void preloadChunksInView(Graphics2D g2d) {
         // Calculate the range of chunk coordinates corresponding to the viewport
-        int startX = (int) Math.max(0, Math.floor((double) (player.x - WIDTH / 2) / (Chunk.CHUNK_SIZE_X * BLOCK_SIZE)));
-        int endX = (int) Math.min(Chunk.getMaxChunkX(), Math.ceil((double) (player.x + WIDTH / 2) / (Chunk.CHUNK_SIZE_X * BLOCK_SIZE)));
-        int startY = (int) Math.max(0, Math.floor((double) (player.y - HEIGHT / 2) / (Chunk.CHUNK_SIZE_Y * BLOCK_SIZE)));
-        int endY = (int) Math.min(Chunk.getMaxChunkY(), Math.ceil((double) (player.y + HEIGHT / 2) / (Chunk.CHUNK_SIZE_Y * BLOCK_SIZE)));
+        int startX = (int) Math.max(0, Math.floor((double) (player.x - WIDTH / 2) / (Chunk.CHUNK_SIZE_X * Block.BLOCK_SIZE)));
+        int endX = (int) Math.min(Chunk.MAX_CHUNK_X, Math.ceil((double) (player.x + WIDTH / 2) / (Chunk.CHUNK_SIZE_X * Block.BLOCK_SIZE)));
+        int startY = (int) Math.max(0, Math.floor((double) (player.y - HEIGHT / 2) / (Chunk.CHUNK_SIZE_Y * Block.BLOCK_SIZE)));
+        int endY = (int) Math.min(Chunk.MAX_CHUNK_Y, Math.ceil((double) (player.y + HEIGHT / 2) / (Chunk.CHUNK_SIZE_Y * Block.BLOCK_SIZE)));
 
         // Preload chunks within the viewport
         for (int x = startX; x <= endX; x++) {
@@ -172,14 +108,12 @@ public class TerrainGenerator extends GameObject {
 
                 // If the chunk is not already loaded, generate and save it
                 if (chunk == null) {
-                    chunk = createNewChunk(x, y, chunkID);
+                    chunk = Chunk.createNewChunk(x, y, chunkID);
                     chunkManager.saveChunk(chunk);
                 }
             }
         }
     }
-
-
 
     /**
      * Method for rendering.
