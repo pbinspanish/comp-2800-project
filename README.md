@@ -19,12 +19,12 @@
 	- [ ] Scrolls in the x and y direction
 	- [ ] Follows the player
 - [ ] World
-	- [ ] Made of blocks (tiles) on a fixed grid in the foreground
+	- [x] Made of blocks (tiles) on a fixed grid in the foreground
 		- [ ] Blocks can be broken and placed
 			- [ ] Blocks drop the item version of themselves when broken
-		- [ ] Blocks are not affected by gravity
+		- [x] Blocks are not affected by gravity
 			- [ ] Exceptions?
-	- [ ] Separate background layer for visual separation
+	- [x] Separate background layer for visual separation
 		- [ ] Different background based on world height
 		- [ ] Different background based on biome
 	- [ ] Finite size
@@ -33,7 +33,7 @@
 		- [ ] Caves generate underground
 		- [ ] Hills/plains/plateaus above ground
 - [ ] Player
-	- [ ] Moves left / right
+	- [x] Moves left / right
 	- [ ] Affected by gravity
 	- [ ] Collides with blocks
 	- [ ] Jumps one block high
