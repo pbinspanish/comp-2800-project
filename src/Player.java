@@ -12,7 +12,7 @@ public class Player extends GameObject {
     public static final int PLAYER_WIDTH = 56, PLAYER_HEIGHT = 56;
 
     private PlayerAnimator pa;
-    private int movementSpeed = 10;
+    private int movementSpeed = 4;
     private int dir = 0;
 
     public Player(int x, int y, int renderPriority) {
@@ -27,9 +27,18 @@ public class Player extends GameObject {
         this.dir = im.dir;
 
         switch (dir) {
-            case 0:
+            case -1:
+                // move left
+                move(dir * movementSpeed, 0);
+                pa.updateState("left");
                 break;
-            default:
+            case 0:
+                // idle
+                pa.updateState("idle");
+                break;
+            case 1:
+                // move right
+                pa.updateState("right");
                 move(dir * movementSpeed, 0);
                 break;
         }
@@ -37,7 +46,7 @@ public class Player extends GameObject {
 
     @Override
     public void render(Graphics2D g2d) {
-        g2d.drawImage(pa.getCurrentFrame(), x, y, PLAYER_WIDTH, PLAYER_HEIGHT, null);
+        pa.render(g2d, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
     }
 
     public void move(int dx, int dy) {
@@ -76,11 +85,11 @@ public class Player extends GameObject {
         BufferedImage[] fallingSprites = Arrays.copyOfRange(sprites, 32, 39);
 
         // Create Animations
-        Animation idleAnimation = new Animation(idleSprites);
-        Animation attackingAnimation = new Animation(attackingSprites);
-        Animation runningAnimation = new Animation(runningSprites);
-        Animation jumpingAnimation = new Animation(jumpingSprites);
-        Animation fallingAnimation = new Animation(fallingSprites);
+        Animation idleAnimation = new Animation(idleSprites, 60);
+        Animation attackingAnimation = new Animation(attackingSprites, 60);
+        Animation runningAnimation = new Animation(runningSprites, 48);
+        Animation jumpingAnimation = new Animation(jumpingSprites, 60);
+        Animation fallingAnimation = new Animation(fallingSprites, 60);
 
         return new PlayerAnimator(new Animation[] { idleAnimation, attackingAnimation, runningAnimation, jumpingAnimation, fallingAnimation }, 0);
     }

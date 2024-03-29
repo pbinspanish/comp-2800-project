@@ -7,28 +7,35 @@ public class Animation {
     private BufferedImage[] sprites;
     private int currentFrame = 0;
 
-    private int duration; // how many frames the animation should last for
-    private int timeBetweenFrames;
-    private int timeSinceLastFrame;
+    private int framesBetweenUpdates;
+    private int framesSinceLastUpdate;
 
-    public Animation(BufferedImage[] sprites) {
+    public Animation(BufferedImage[] sprites, int duration) {
         this.sprites = sprites;
-        // this.duration = duration;
 
-        // timeBetweenFrames = sprites.length / duration;
+        framesBetweenUpdates = duration / sprites.length;
+        framesSinceLastUpdate = 0;
     }
 
     public void tick() {
-        // TODO: account for animation speed / length
-        if (currentFrame == sprites.length - 1) {
-            currentFrame = 0;
+        if (framesSinceLastUpdate >= framesBetweenUpdates) {
+            if (currentFrame == sprites.length - 1) {
+                currentFrame = 0;
+            } else {
+                currentFrame++;
+                framesSinceLastUpdate = 0;
+            }
         }
         else {
-            currentFrame++;
+            framesSinceLastUpdate++;
         }
     }
 
     public BufferedImage getCurrentFrame() {
         return sprites[currentFrame];
+    }
+
+    public void reset() {
+        currentFrame = 0;
     }
 }
