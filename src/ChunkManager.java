@@ -59,11 +59,5 @@ public class ChunkManager {
     }
 
 
-    public int getMaxChunkX() {
-        return 1000;
-    }
 
-    public int getMaxChunkY() {
-        return 1000;
-    }
 }

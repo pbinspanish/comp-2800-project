@@ -2,7 +2,7 @@ import java.io.Serializable;
 
 public class Chunk implements Serializable {
     public static final int CHUNK_SIZE_X = 32;
-    public static final int CHUNK_SIZE_Y = 64;
+    public static final int CHUNK_SIZE_Y = 100;
     private static final long serialVersionUID = 1L;
 
     private String chunkID;
@@ -31,5 +31,12 @@ public class Chunk implements Serializable {
 
     public Block[][] getBlocks() {
         return blocks;
+    }
+    public static int getMaxChunkX() {
+        return 1000;
+    }
+
+    public static int getMaxChunkY() {
+        return 100;
     }
 }
