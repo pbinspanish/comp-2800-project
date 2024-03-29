@@ -20,6 +20,8 @@ public class ImageLoader {
                 return blockSprites[31];
             case "IRON_ORE":
                 return blockSprites[78];
+            case "GOLD_ORE":
+                return blockSprites[76];
             case "DIAMOND_ORE":
                 return blockSprites[79];
             default:

@@ -63,7 +63,7 @@ public class TerrainGenerator extends GameObject {
                 }
                 else if (j < GROUND_LEVEL + 6) { // Blocks between level 1 and 6 are Dirt
                     blockType = "DIRT";
-                } else { // Otherwise blocks are stone
+                } else { // Otherwise, blocks are stone or random ore
                     blockType = getRandomBlock();
                 }
                 blocks[i][j] = new Block(blockType);
@@ -74,26 +74,23 @@ public class TerrainGenerator extends GameObject {
 
     private String getRandomBlock() {
         double randomNumber = random.nextDouble(); // Generates a random number between 0 (inclusive) and 1 (exclusive)
-        System.out.println(randomNumber);
-        double stoneProb = 0.96;   // Probability of stone blocks (96%)
-        double ironProb = 0.03;    // Probability of iron blocks (3%)
-        double diamondProb = 0.01; // Probability of diamond blocks (1%)
+        double stoneProb = 0.94;   // Probability of stone blocks (94%)
+        double ironProb = 0.03;    // Probability of iron ore (3%)
+        double goldProb = 0.02;    // Probability of gold ore (2%)
+        double diamondProb = 0.01; // Probability of diamond ore (1%)
 
         // Check the probability ranges and return the corresponding block type
         if (randomNumber < stoneProb) {
             return "STONE";
         } else if (randomNumber < stoneProb + ironProb) {
             return "IRON_ORE";
-        } else {
+        } else if(randomNumber < stoneProb + ironProb + goldProb){
+            return "GOLD_ORE";
+        }
+        else {
             return "DIAMOND_ORE";
         }
     }
-
-
-
-
-
-
 
 
     /**
