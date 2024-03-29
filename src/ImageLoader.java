@@ -6,30 +6,48 @@ import javax.imageio.*;
 public class ImageLoader {
     BufferedImage[] blockSprites;
 
-    public ImageLoader() {
-        blockSprites = new BufferedImage[3];
-
-        blockSprites[0] = ImageLoader.loadImage("resources/dirt.png");
-        blockSprites[0] = ImageLoader.resizeImage(blockSprites[0], 32, 32);
-        blockSprites[1] = ImageLoader.loadImage("resources/stone.png");
-        blockSprites[1] = ImageLoader.resizeImage(blockSprites[1], 32, 32);
-        blockSprites[2] = ImageLoader.loadImage("resources/grass.png");
-        blockSprites[2] = ImageLoader.resizeImage(blockSprites[2], 32, 32);
+    public ImageLoader(String filepath) {
+        blockSprites = gatherSprites(filepath);
     }
     
     public BufferedImage getBlockSprite(String name) {
         switch (name) {
             case "DIRT":
-                return blockSprites[0];
+                return blockSprites[21];
             case "STONE":
-                return blockSprites[1];
+                return blockSprites[77];
             case "GRASS":
-                return blockSprites[2];
+                return blockSprites[31];
+            case "IRON_ORE":
+                return blockSprites[78];
+            case "DIAMOND_ORE":
+                return blockSprites[79];
             default:
                 return null;
         }
     }
 
+
+    private BufferedImage[] gatherSprites(String filepath) {
+        BufferedImage[] sprites = new BufferedImage[160];
+
+        // Load Sprites
+        try {
+            int currentSprite = 0;
+            BufferedImage spriteAtlas = ImageIO.read(new File(filepath));
+            for (int i = 0; i < 16; i++) {
+                for (int j = 0; j < 10; j++) {
+                    BufferedImage blockImage = spriteAtlas.getSubimage(j * 16, i * 16, 16, 16);
+                    sprites[currentSprite] = resizeImage(blockImage, 32, 32);
+                    currentSprite++;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return sprites;
+    }
     public static BufferedImage loadImage(String filepath) {
         BufferedImage image = null;
         try {

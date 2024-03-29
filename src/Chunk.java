@@ -1,7 +1,8 @@
 import java.io.Serializable;
 
 public class Chunk implements Serializable {
-    public static final int CHUNK_SIZE = 32;
+    public static final int CHUNK_SIZE_X = 32;
+    public static final int CHUNK_SIZE_Y = 64;
     private static final long serialVersionUID = 1L;
 
     private String chunkID;

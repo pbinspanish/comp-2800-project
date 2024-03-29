@@ -39,7 +39,7 @@ public class GameCanvas extends Canvas implements Runnable {
         gm.addGameObject(bg);
 
         // Initialize Player
-        player = new Player(290, 290, 10000);
+        player = new Player(270, 270, 10000);
         gm.addGameObject(player);
 
         // Initialize Camera

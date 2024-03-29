@@ -1,4 +1,7 @@
+import javax.imageio.ImageIO;
 import java.awt.image.*;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 public class Block implements Serializable {
@@ -17,24 +20,8 @@ public class Block implements Serializable {
     }
 
 
-    public BufferedImage getImage() {
-        switch (type){
-            case "DIRT":
-               image = ImageLoader.loadImage("resources/dirt.png");
-               image = ImageLoader.resizeImage(image, 32, 32);
-               break;
-            case "STONE":
-                image = ImageLoader.loadImage("resources/stone.png");
-                image = ImageLoader.resizeImage(image, 32, 32);
-                break;
-            case "GRASS":
-                image = ImageLoader.loadImage("resources/grass.png");
-                image = ImageLoader.resizeImage(image, 32, 32);
-                break;
-            default:
-                image = null;
-                break;
-        }
-        return image;
-    }
+
+
+
+
 }
