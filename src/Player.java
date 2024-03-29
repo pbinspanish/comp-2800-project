@@ -9,7 +9,7 @@ import java.io.*;
 /// Manages the state of the Player character.
 ///
 public class Player extends GameObject {
-    public static final int PLAYER_WIDTH = 56, PLAYER_HEIGHT = 56;
+    public static final int PLAYER_WIDTH = 64, PLAYER_HEIGHT = 64;
 
     private PlayerAnimator pa;
     private int movementSpeed = 4;
@@ -63,7 +63,8 @@ public class Player extends GameObject {
             BufferedImage spriteAtlas = ImageIO.read(new File("resources/char_blue.png"));
             for (int i = 0; i < 7; i++) {
                 for (int j = 0; j < 8; j++) {
-                    sprites[currentSprite] = spriteAtlas.getSubimage(j * 56, i * 56, 56, 56);
+                    BufferedImage sprite = spriteAtlas.getSubimage(j * 56, i * 56, 56, 56);
+                    sprites[currentSprite] = ImageLoader.resizeImage(sprite, 64, 64);
                     currentSprite++;
                 }
             }
