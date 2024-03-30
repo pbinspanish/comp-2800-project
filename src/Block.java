@@ -15,23 +15,42 @@ public class Block implements Serializable {
     public Block(String type) {
         this.type = type;
     }
-    static String getRandomBlock() {
+    static String getRandomBlock(int y) {
         double randomNumber = random.nextDouble(); // Generates a random number between 0 (inclusive) and 1 (exclusive)
         double stoneProb = 0.94;   // Probability of stone blocks (94%)
         double ironProb = 0.03;    // Probability of iron ore (3%)
         double goldProb = 0.02;    // Probability of gold ore (2%)
         double diamondProb = 0.01; // Probability of diamond ore (1%)
+        double airProb = 0.95;
+        double grassProb = 0.03;
+        double flowerProb;
+        int level = Chunk.GROUND_LEVEL + 1;
 
         // Check the probability ranges and return the corresponding block type
-        if (randomNumber < stoneProb) {
-            return "STONE";
-        } else if (randomNumber < stoneProb + ironProb) {
-            return "IRON_ORE";
-        } else if (randomNumber < stoneProb + ironProb + goldProb) {
-            return "GOLD_ORE";
-        } else {
-            return "DIAMOND_ORE";
+        if(Chunk.GROUND_LEVEL < y) {
+            if (randomNumber < stoneProb) {
+                return "STONE";
+            } else if (randomNumber < stoneProb + ironProb) {
+                return "IRON_ORE";
+            } else if (randomNumber < stoneProb + ironProb + goldProb) {
+                return "GOLD_ORE";
+            } else {
+                return "DIAMOND_ORE";
+            }
+
+        } else if (y == Chunk.GROUND_LEVEL - 1) {
+            if(randomNumber<airProb){
+                return "AIR";
+            }
+            else if(randomNumber < airProb + grassProb){
+                return "GRASS_PLANT";
+            }else{
+                return "FLOWER_RED_PLANT";
+            }
+
         }
+        return "AIR";
+
     }
 
 

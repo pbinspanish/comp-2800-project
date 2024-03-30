@@ -19,11 +19,15 @@ public class ImageLoader {
             case "GRASS":
                 return blockSprites[31];
             case "IRON_ORE":
-                return blockSprites[78];
+                return blockSprites[79];
             case "GOLD_ORE":
                 return blockSprites[76];
             case "DIAMOND_ORE":
-                return blockSprites[79];
+                return blockSprites[78];
+            case "GRASS_PLANT":
+                return blockSprites[99];
+            case "FLOWER_RED_PLANT":
+                return blockSprites[119];
             case "AIR":
                 return null;
             default:

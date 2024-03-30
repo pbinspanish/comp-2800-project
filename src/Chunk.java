@@ -33,21 +33,23 @@ public class Chunk implements Serializable {
 
         for (int i = 0; i < Chunk.CHUNK_SIZE_X; i++) {
             for (int j = 0; j < Chunk.CHUNK_SIZE_Y; j++) {
-                if (j == GROUND_LEVEL) {// Top level blocks are grass
+                if (j == GROUND_LEVEL) {
+                    // Top level blocks are grass
                     blockType = "GRASS";
-                } else if(j < GROUND_LEVEL){
-                    blockType = "AIR";
                 }
-                else if (j < GROUND_LEVEL + 6) { // Blocks between level 1 and 6 are Dirt
+                else if (j>GROUND_LEVEL && j < GROUND_LEVEL + 6) {
+                    // Blocks between level 1 and 6 are dirt
                     blockType = "DIRT";
-                } else { // Otherwise, blocks are stone or random ore
-                    blockType = Block.getRandomBlock();
+                } else {
+                    // Otherwise, generate blocks based on random type
+                    blockType = Block.getRandomBlock(j);
                 }
                 blocks[i][j] = new Block(blockType);
             }
         }
         return new Chunk(chunkID, chunkX, chunkY, blocks);
     }
+
 
 
     public String getChunkID() {
