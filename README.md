@@ -5,6 +5,8 @@
 - [ ] Links to images
 	- [ ] Icons (armour, weapons, extras)
 	https://merchant-shade.itch.io/16x16-mixed-rpg-icons
+  	- [ ] Inventory Bar, crafting
+  	 https://kasayaa.itch.io/kasayas-inventory-and-frames
 	- [ ] Character (with all movements)
 	(image available on the shared word doc)
 	- [ ] Blocks
