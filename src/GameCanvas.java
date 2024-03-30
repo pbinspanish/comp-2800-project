@@ -21,6 +21,8 @@ public class GameCanvas extends Canvas implements Runnable {
     private TerrainGenerator terrainGenerator;
     private Camera camera;
     private Player player;
+    private InventoryBar inventoryBar;
+    private Inventory inventory;
 
 
     public GameCanvas() {
@@ -49,6 +51,12 @@ public class GameCanvas extends Canvas implements Runnable {
         // Initialize Terrain Generator
         terrainGenerator = new TerrainGenerator(player);
         gm.addGameObject(terrainGenerator);
+
+        // Initialize Inventory
+        inventory = new Inventory();
+
+        inventoryBar = new InventoryBar(inventory);
+        gm.addGameObject(inventoryBar);
     }
 
     public void start() {
