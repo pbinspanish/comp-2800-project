@@ -24,6 +24,8 @@ public class ImageLoader {
                 return blockSprites[76];
             case "DIAMOND_ORE":
                 return blockSprites[79];
+            case "AIR":
+                return null;
             default:
                 return null;
         }

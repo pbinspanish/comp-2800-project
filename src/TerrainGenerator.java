@@ -74,7 +74,8 @@ public class TerrainGenerator extends GameObject {
                 int blockY = startY + j * Block.BLOCK_SIZE;
 
                 // Retrieve the image for the block
-                BufferedImage blockImage = imageLoader.getBlockSprite(blocks[i][j].getType());
+                String type = blocks[i][j].getType();
+                BufferedImage blockImage = imageLoader.getBlockSprite(type);
 
                 // Draw the block image on the screen
                 g2d.drawImage(blockImage, blockX, blockY, null);
