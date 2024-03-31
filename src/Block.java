@@ -21,8 +21,8 @@ public class Block implements Serializable {
         double ironProb = 0.03;    // Probability of iron ore (3%)
         double goldProb = 0.02;    // Probability of gold ore (2%)
         double diamondProb = 0.01; // Probability of diamond ore (1%)
-        double airProb = 0.95;
-        double grassProb = 0.03;
+        double airProb = 0.90;
+        double grassProb = 0.05;
         double flowerProb;
         int level = Chunk.GROUND_LEVEL + 1;
 
