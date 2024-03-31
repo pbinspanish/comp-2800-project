@@ -54,29 +54,9 @@ public class Player extends GameObject {
         y += dy;
     }
 
-    private BufferedImage[] gatherSprites() {
-        BufferedImage[] sprites = new BufferedImage[56];
-        
-        // Load Sprites
-        try {
-            int currentSprite = 0;
-            BufferedImage spriteAtlas = ImageIO.read(new File("resources/char_blue.png"));
-            for (int i = 0; i < 7; i++) {
-                for (int j = 0; j < 8; j++) {
-                    BufferedImage sprite = spriteAtlas.getSubimage(j * 56, i * 56, 56, 56);
-                    sprites[currentSprite] = ImageLoader.resizeImage(sprite, 64, 64);
-                    currentSprite++;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return sprites;
-    }
     
     private PlayerAnimator setupPlayerAnimator() {
-        BufferedImage[] sprites = gatherSprites();
+        BufferedImage[] sprites = ImageLoader.gatherSprites("resources/char_blue.png", 7, 8, 56, 56, 64, 64);
 
         // Grab Sprites
         BufferedImage[] idleSprites = Arrays.copyOfRange(sprites, 0, 5);

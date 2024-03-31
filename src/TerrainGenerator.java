@@ -14,8 +14,9 @@ public class TerrainGenerator extends GameObject {
 
     public TerrainGenerator(Player player) {
         chunkManager = new ChunkManager();
-        imageLoader = new ImageLoader("resources/tilemap.png");
         this.player = player;
+        Block.setBlockSprites("resources/tileMap.png", 15, 10, 16, 16, 32, 32);
+        Block.setBlockIconSprites("resources/blockIcons.png", 18 , 8, 16, 16, 32, 32);
     }
 
     /**
@@ -75,7 +76,7 @@ public class TerrainGenerator extends GameObject {
 
                 // Retrieve the image for the block
                 String type = blocks[i][j].getType();
-                BufferedImage blockImage = imageLoader.getBlockSprite(type);
+                BufferedImage blockImage = Block.getBlockSprite(type);
 
                 // Draw the block image on the screen
                 g2d.drawImage(blockImage, blockX, blockY, null);

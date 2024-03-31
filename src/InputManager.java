@@ -7,6 +7,8 @@ public class InputManager implements KeyListener {
 
     public int dir = 0; // -1 = Left, 0 = Idle, 1 = Right
     public boolean jumping = false;
+    private boolean eKeyPressedLastTime = false; // Track if "E" was pressed last time
+
 
     @Override
     // set flags from pressed keys
@@ -24,6 +26,16 @@ public class InputManager implements KeyListener {
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
                 dir = 1;
+                break;
+            case KeyEvent.VK_E:
+                // Toggle full inventory display only if "E" wasn't pressed last time
+                if (!eKeyPressedLastTime) {
+                    Inventory.displayFullInventory = true;
+                    eKeyPressedLastTime = true; // Update the flag
+                }else{
+                    Inventory.displayFullInventory = false;
+                    eKeyPressedLastTime = false; // Update the flag
+                }
                 break;
         }
     }

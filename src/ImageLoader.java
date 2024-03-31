@@ -4,49 +4,26 @@ import java.io.*;
 import javax.imageio.*;
 
 public class ImageLoader {
-    BufferedImage[] blockSprites;
 
-    public ImageLoader(String filepath) {
-        blockSprites = gatherSprites(filepath);
+
+    public ImageLoader() {
+
     }
     
-    public BufferedImage getBlockSprite(String name) {
-        switch (name) {
-            case "DIRT":
-                return blockSprites[21];
-            case "STONE":
-                return blockSprites[77];
-            case "GRASS":
-                return blockSprites[31];
-            case "IRON_ORE":
-                return blockSprites[79];
-            case "GOLD_ORE":
-                return blockSprites[76];
-            case "DIAMOND_ORE":
-                return blockSprites[78];
-            case "GRASS_PLANT":
-                return blockSprites[99];
-            case "FLOWER_RED_PLANT":
-                return blockSprites[119];
-            case "AIR":
-                return null;
-            default:
-                return null;
-        }
-    }
 
 
-    private BufferedImage[] gatherSprites(String filepath) {
-        BufferedImage[] sprites = new BufferedImage[160];
+
+    static BufferedImage[] gatherSprites(String filepath, int rows, int cols, int height, int width, int newHeight, int newWidth) {
+        BufferedImage[] sprites = new BufferedImage[rows*cols];
 
         // Load Sprites
         try {
             int currentSprite = 0;
             BufferedImage spriteAtlas = ImageIO.read(new File(filepath));
-            for (int i = 0; i < 16; i++) {
-                for (int j = 0; j < 10; j++) {
-                    BufferedImage blockImage = spriteAtlas.getSubimage(j * 16, i * 16, 16, 16);
-                    sprites[currentSprite] = resizeImage(blockImage, 32, 32);
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    BufferedImage blockImage = spriteAtlas.getSubimage(j * width, i * height, width, height);
+                    sprites[currentSprite] = resizeImage(blockImage, newWidth, newHeight);
                     currentSprite++;
                 }
             }

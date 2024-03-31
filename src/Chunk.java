@@ -37,7 +37,7 @@ public class Chunk implements Serializable {
                     // Top level blocks are grass
                     blockType = "GRASS";
                 }
-                else if (j>GROUND_LEVEL && j < GROUND_LEVEL + 6) {
+                else if (j>GROUND_LEVEL && j < GROUND_LEVEL + 5) {
                     // Blocks between level 1 and 6 are dirt
                     blockType = "DIRT";
                 } else {
