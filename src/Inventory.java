@@ -6,20 +6,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Inventory extends GameObject implements Serializable {
-    private static final int INVENTORY_SLOT_NUMBER = 9; // Number of inventory slots
-    private static final int SLOT_SIZE = 50; // Size of each inventory slot
+    private static final int INVENTORY_SLOT_NUMBER = 9;
+    private static final int SLOT_SIZE = 50;
     private static final int INVENTORY_Y = 10;
     private static final int FULL_INVENTORY_WIDTH = 435;
     private static final int FULL_INVENTORY_HEIGHT = 534;
     public static boolean displayFullInventory = false;
-    private static final String SLOT_IMAGE_PATH = "resources/inventorySlot.png"; // Path to slot image
+    private static final String SLOT_IMAGE_PATH = "resources/inventorySlot.png";
     private static final String FULL_INVENTORY_PATH = "resources/fullInventory.png";
     private BufferedImage inventorySlot;
     private BufferedImage fullInventory;
     private ArrayList<Item> itemList;
+
     public Inventory() {
         itemList = new ArrayList<>();
         loadInventoryImages();
+        Item grass = new Item("STONE", 1);
+        addItem(grass);
     }
     public void loadInventoryImages(){
         inventorySlot = ImageLoader.loadImage(SLOT_IMAGE_PATH);
@@ -32,18 +35,37 @@ public class Inventory extends GameObject implements Serializable {
     public void render(Graphics2D graphics2D){
         if(displayFullInventory){
             graphics2D.drawImage(fullInventory, (GameCanvas.GAME_WIDTH - FULL_INVENTORY_WIDTH) / 2, (GameCanvas.GAME_HEIGHT - FULL_INVENTORY_HEIGHT) / 2, null);
+
         }
         else{
             int x = 5;
+            Font originalFont = graphics2D.getFont();
+            Font boldFont = originalFont.deriveFont(Font.BOLD);
+            graphics2D.setFont(boldFont);
+
             for(int i = 0; i < INVENTORY_SLOT_NUMBER; i++){
                 graphics2D.drawImage(inventorySlot, x, INVENTORY_Y, SLOT_SIZE, SLOT_SIZE, null);
+                if (i < itemList.size()) {
+                    Item item = itemList.get(i);
+                    BufferedImage itemImage = item.getItemImage(item.getItemName());
+                    int xOffset = (SLOT_SIZE - itemImage.getWidth()) / 2; // Calculate horizontal offset
+                    int yOffset = (SLOT_SIZE - itemImage.getHeight()) / 2; // Calculate vertical offset
+                    graphics2D.drawImage(itemImage, x + xOffset, INVENTORY_Y + yOffset, null);
+                    int quantity = item.getItemQuantity();
+                    if (quantity >= 1) {
+                        String quantityString = String.valueOf(quantity);
+                        int textX = x + SLOT_SIZE - 5 - graphics2D.getFontMetrics().stringWidth(quantityString);
+                        int textY = INVENTORY_Y + SLOT_SIZE - 5; // Adjust the vertical position as needed
+
+                        graphics2D.setColor(Color.black);
+                        graphics2D.drawString(quantityString, textX, textY);
+                    }
+                }
                 x+=SLOT_SIZE;
             }
         }
-
-
-
     }
+
     public void addItem(Item item){
         itemList.add(item);
 

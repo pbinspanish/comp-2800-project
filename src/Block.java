@@ -13,8 +13,6 @@ public class Block implements Serializable {
     private String type;
     private BufferedImage image;
     private static BufferedImage[] blockSprites;
-    private static BufferedImage[] blockIconSprites;
-
 
     public Block(String type) {
         this.type = type;
@@ -93,29 +91,6 @@ public class Block implements Serializable {
             default:
                 return null;
         }
-    }
-
-    public static void setBlockIconSprites(String filepath, int rows, int cols, int height, int width, int newHeight, int newWidth) {
-        blockIconSprites = ImageLoader.gatherSprites( filepath,  rows,  cols,  height,  width,  newHeight,  newWidth);
-    }
-    public static BufferedImage getBlockIconSprites(String name){
-        switch (name) {
-            case "DIRT":
-                return blockIconSprites[1];
-            case "STONE":
-                return blockIconSprites[10];
-            case "GRASS":
-                return blockIconSprites[2];
-            case "IRON_ORE":
-                return blockIconSprites[50];
-            case "GOLD_ORE":
-                return blockIconSprites[51];
-            case "DIAMOND_ORE":
-                return blockIconSprites[52];
-            default:
-                return null;
-        }
-
     }
 
 

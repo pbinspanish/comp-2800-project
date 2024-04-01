@@ -5,11 +5,16 @@ import java.util.Map;
 
 public class ChunkManager {
     public static HashMap<String, Chunk> loadedChunks;
-    private final String DIRECTORY_PATH = "chunks/";
+    private final String SAVE_DIRECTORY_PATH = "saves/";
+    private final String CHUNK_DIRECTORY_PATH = "/chunks/";
     private final String FILE_TYPE = ".ser";
+    private String worldSaveNum;
+    private String fullDir;
 
-    public ChunkManager() {
+    public ChunkManager(String saveNum) {
         loadedChunks = new HashMap<>();
+        worldSaveNum = saveNum;
+        fullDir = SAVE_DIRECTORY_PATH + saveNum + CHUNK_DIRECTORY_PATH;
         createChunkDir();
     }
 
@@ -21,7 +26,7 @@ public class ChunkManager {
     public void saveChunk(Chunk chunk) {
         String chunkID = chunk.getChunkID();
         try {
-           FileOutputStream fileOutputStream = new FileOutputStream(DIRECTORY_PATH + chunkID + FILE_TYPE);
+           FileOutputStream fileOutputStream = new FileOutputStream(fullDir + chunkID + FILE_TYPE);
            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
            objectOutputStream.writeObject(chunk);
 
@@ -41,7 +46,7 @@ public class ChunkManager {
     public Chunk loadChunk(String chunkID) {
         Chunk chunk = null;
         try {
-            FileInputStream fileIn = new FileInputStream(DIRECTORY_PATH + chunkID + FILE_TYPE);
+            FileInputStream fileIn = new FileInputStream(fullDir + chunkID + FILE_TYPE);
             ObjectInputStream in = new ObjectInputStream(fileIn);
             chunk = (Chunk) in.readObject();
             in.close();
@@ -53,7 +58,7 @@ public class ChunkManager {
         return chunk;
     }
     private void createChunkDir(){
-        File directory = new File(DIRECTORY_PATH);
+        File directory = new File(fullDir);
         if(!(directory.exists())){
             directory.mkdirs();
         }

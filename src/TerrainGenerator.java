@@ -13,10 +13,10 @@ public class TerrainGenerator extends GameObject {
 
 
     public TerrainGenerator(Player player) {
-        chunkManager = new ChunkManager();
+        chunkManager = new ChunkManager("save1");
         this.player = player;
         Block.setBlockSprites("resources/tileMap.png", 15, 10, 16, 16, 32, 32);
-        Block.setBlockIconSprites("resources/blockIcons.png", 18 , 8, 16, 16, 32, 32);
+        Item.setBlockIconSprites("resources/blockIcons.png", 18 , 18, 32, 32, 40, 40);
     }
 
     /**
