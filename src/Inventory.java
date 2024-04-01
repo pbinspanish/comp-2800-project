@@ -14,15 +14,16 @@ public class Inventory extends GameObject implements Serializable {
     public static boolean displayFullInventory = false;
     private static final String SLOT_IMAGE_PATH = "resources/inventorySlot.png";
     private static final String FULL_INVENTORY_PATH = "resources/fullInventory.png";
-    private BufferedImage inventorySlot;
-    private BufferedImage fullInventory;
+    private transient BufferedImage inventorySlot;
+    private transient BufferedImage fullInventory;
     private ArrayList<Item> itemList;
+    private transient InventoryManager inventoryManager;
 
     public Inventory() {
+        inventoryManager = new InventoryManager("save1");
         itemList = new ArrayList<>();
         loadInventoryImages();
-        Item grass = new Item("STONE", 1);
-        addItem(grass);
+      itemList = inventoryManager.loadInventory().itemList;
     }
     public void loadInventoryImages(){
         inventorySlot = ImageLoader.loadImage(SLOT_IMAGE_PATH);
@@ -68,11 +69,14 @@ public class Inventory extends GameObject implements Serializable {
 
     public void addItem(Item item){
         itemList.add(item);
-
+        updateInventoryFile();
     }
     public void removeItem(Item item){
         itemList.remove(item);
-
+        updateInventoryFile();
+    }
+    public void updateInventoryFile(){
+        inventoryManager.saveInventory(this);
     }
     public boolean containsItem(Item item){
         return itemList.contains(item);
