@@ -24,15 +24,17 @@ public class InventoryManager {
         }
     }
 
-    public Inventory loadInventory() {
+    public Inventory loadInventory(Inventory inventory) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fullDir + FILE_NAME + FILE_TYPE))) {
             Inventory loadedInventory = (Inventory) inputStream.readObject();
             System.out.println("Inventory loaded successfully.");
             return loadedInventory;
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error loading inventory: " + e.getMessage());
-            return null;
+           saveInventory(inventory);
+           return inventory;
+
         }
+
     }
     private void createInventoryDir(){
         File directory = new File(fullDir);

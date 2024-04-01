@@ -23,7 +23,7 @@ public class Inventory extends GameObject implements Serializable {
         inventoryManager = new InventoryManager("save1");
         itemList = new ArrayList<>();
         loadInventoryImages();
-      itemList = inventoryManager.loadInventory().itemList;
+      itemList = inventoryManager.loadInventory(this).itemList;
     }
     public void loadInventoryImages(){
         inventorySlot = ImageLoader.loadImage(SLOT_IMAGE_PATH);
