@@ -1,9 +1,9 @@
 import java.awt.*;
 import java.util.*;
 
-///
-/// Stores and manages all objects in the game.
-///
+/**
+ * Stores and manages all objects in the game.
+ */
 public class GameManager {
 
     public ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();

@@ -2,16 +2,14 @@ import java.awt.*;
 import java.awt.image.*;
 import java.util.Arrays;
 
-import javax.imageio.ImageIO;
-import java.io.*;
-
-///
-/// Manages the state of the Player character.
-///
+/**
+ * Contains the definition of the Player character.
+ */
 public class Player extends GameObject {
     public static final int PLAYER_WIDTH = 64, PLAYER_HEIGHT = 64;
 
-    private PlayerAnimator pa;
+    public Camera camera;
+    public PlayerAnimator pa;
     private int movementSpeed = 4;
     private int dir = 0;
 
@@ -46,15 +44,23 @@ public class Player extends GameObject {
 
     @Override
     public void render(Graphics2D g2d) {
-        pa.render(g2d, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+        pa.render(g2d, x, y, PLAYER_WIDTH, PLAYER_HEIGHT, camera);
     }
 
+    /**
+     * Moves the player by the given values.
+     * @param dx How far to move in the x-direction.
+     * @param dy How far to move in the y-direction.
+     */
     public void move(int dx, int dy) {
         x += dx;
         y += dy;
     }
 
-    
+    /**
+     * Initializes the PlayerAnimator.
+     * @return The newly initialized PlayerAnimator.
+     */
     private PlayerAnimator setupPlayerAnimator() {
         BufferedImage[] sprites = ImageLoader.gatherSprites("resources/char_blue.png", 7, 8, 56, 56, 64, 64);
 
@@ -72,6 +78,7 @@ public class Player extends GameObject {
         Animation jumpingAnimation = new Animation(jumpingSprites, 60);
         Animation fallingAnimation = new Animation(fallingSprites, 60);
 
-        return new PlayerAnimator(new Animation[] { idleAnimation, attackingAnimation, runningAnimation, jumpingAnimation, fallingAnimation }, 0);
+        return new PlayerAnimator(new Animation[] { idleAnimation, attackingAnimation, runningAnimation,
+                jumpingAnimation, fallingAnimation }, 0);
     }
 }

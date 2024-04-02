@@ -1,13 +1,22 @@
 import java.awt.*;
 import java.awt.image.*;
 
-///
-/// Handles the core of the game logic, including the primary render and tick loop.
-///
+/**
+ * Handles the core of the game logic, including the primary render and tick loop.
+ */
 public class GameCanvas extends Canvas implements Runnable {
     // Core
     private Thread thread;
     private BufferStrategy bs;
+
+    public long lastTime;
+    public long timer;
+    public double delta;
+    public long lastTickTime;
+    public long lastRenderTime;
+    public final int UPS_CAP = 60;
+
+    public final boolean SHOW_DEBUG_GRAPHICS = true; // change to true to show debug info
 
     // Game Management
     private GameManager gm;
@@ -18,10 +27,12 @@ public class GameCanvas extends Canvas implements Runnable {
     private Background bg;
 
     // Logic
-    private TerrainGenerator terrainGenerator;
+    private ChunkManager chunkManager;
     private Camera camera;
     private Player player;
     private Inventory inventory;
+
+    private Debug debug;
 
 
     public GameCanvas() {
@@ -37,23 +48,31 @@ public class GameCanvas extends Canvas implements Runnable {
 
         // Initialize Background
         this.bg = new Background(this.getWidth(), this.getHeight());
-        gm.addGameObject(bg);
+        this.gm.addGameObject(bg);
 
         // Initialize Player
-        player = new Player(270, 270, 10000);
-        gm.addGameObject(player);
+        this.player = new Player(0, 0, 10000);
+        this.gm.addGameObject(player);
 
         // Initialize Camera
-        camera = new Camera(100, 100, this.getHeight(), this.getWidth());
-        gm.addGameObject(camera);
+        this.camera = new Camera(this, player);
+        this.gm.addGameObject(camera);
 
-        // Initialize Terrain Generator
-        terrainGenerator = new TerrainGenerator(player);
-        gm.addGameObject(terrainGenerator);
+        this.player.camera = camera;
+
+        // Initialize Chunk Manager
+        this.chunkManager = new ChunkManager("save1", player, camera);
+        this.gm.addGameObject(chunkManager);
 
         // Initialize Inventory
-        inventory = new Inventory();
-        gm.addGameObject(inventory);
+        this.inventory = new Inventory();
+        this.gm.addGameObject(inventory);
+
+        // Debug
+        if (SHOW_DEBUG_GRAPHICS) {
+            this.debug = new Debug(player, camera, chunkManager, this);
+            this.gm.addGameObject(debug);
+        }
     }
 
     public void start() {
@@ -67,11 +86,9 @@ public class GameCanvas extends Canvas implements Runnable {
     @Override
     public void run() {
         // Setup Ticking
-        long lastTime = System.nanoTime();
-        long timer = System.currentTimeMillis();
-        double delta = 0;
-
-        final int UPS_CAP = 60;
+        lastTime = System.nanoTime();
+        timer = System.currentTimeMillis();
+        delta = 0;
 
         while (true) {
             long now = System.nanoTime();
@@ -79,11 +96,16 @@ public class GameCanvas extends Canvas implements Runnable {
             lastTime = now;
 
             while (delta >= 1) {
+                long currentTime = System.currentTimeMillis();
                 tick();
+                lastTickTime = System.currentTimeMillis() - currentTime;
+
                 delta--;
             }
 
+            long currentTime = System.currentTimeMillis();
             render();
+            lastRenderTime = System.currentTimeMillis() - currentTime;
 
             if (System.currentTimeMillis() - timer > 1000)
                 timer += 1000;
@@ -104,16 +126,8 @@ public class GameCanvas extends Canvas implements Runnable {
         Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        /*
-         * DRAW
-         */
-
-
         // render() all GameObjects
-
         gm.render(g2d);
-        // terrainGenerator.generateWorld(g2d);
-        // player.render(g2d);
 
         // End Drawing
         g2d.dispose();
