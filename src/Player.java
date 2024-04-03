@@ -12,7 +12,7 @@ public class Player extends GameObject {
     public static final int MOVEMENT_SPEED = 4;
     public static final int GRAVITY_ACCELERATION = 1;
     public static final int TERMINAL_VELOCITY = 10;
-    public static final int JUMP_VELOCITY = -10;
+    public static final int JUMP_VELOCITY = -20;
 
     public Camera camera;
     public PlayerAnimator pa;
@@ -30,26 +30,6 @@ public class Player extends GameObject {
 
     @Override
     public void tick(InputManager im) {
-        // move based on the direction and sync with the current input
-        this.dir = im.dir;
-
-        switch (dir) {
-            case -1:
-                // move left
-                move(dir * MOVEMENT_SPEED, 0);
-                pa.updateState("left");
-                break;
-            case 0:
-                // idle
-                pa.updateState("idle");
-                break;
-            case 1:
-                // move right
-                pa.updateState("right");
-                move(dir * MOVEMENT_SPEED, 0);
-                break;
-        }
-
         // jump
         if (im.jumping && onGround) {
             currentFallSpeed = JUMP_VELOCITY;
@@ -67,6 +47,34 @@ public class Player extends GameObject {
             currentFallSpeed = 0;
         }
 
+        // move based on the direction and sync with the current input
+        this.dir = im.dir;
+        String direction = "";
+        switch (this.dir) {
+            case -1:
+                direction = "LEFT";
+                move(dir * MOVEMENT_SPEED, 0);
+                break;
+
+            case 0:
+                break;
+
+            case 1:
+                direction = "RIGHT";
+                move(dir * MOVEMENT_SPEED, 0);
+                break;
+        }
+        pa.changeMirror(direction);
+
+        if (currentFallSpeed < 0) {
+            pa.updateState("JUMP");
+        } else if (currentFallSpeed > 0 || (currentFallSpeed == 0 && !onGround)) {
+            pa.updateState("FALL");
+        } else if (currentFallSpeed == 0 && onGround && dir != 0) {
+            pa.updateState("RUN");
+        } else {
+            pa.updateState("IDLE");
+        }
     }
 
     @Override
@@ -173,19 +181,27 @@ public class Player extends GameObject {
 
         // Grab Sprites
         BufferedImage[] idleSprites = Arrays.copyOfRange(sprites, 0, 5);
-        BufferedImage[] attackingSprites = Arrays.copyOfRange(sprites, 8, 13);
-        BufferedImage[] runningSprites = Arrays.copyOfRange(sprites, 16, 23);
-        BufferedImage[] jumpingSprites = Arrays.copyOfRange(sprites, 24, 31);
-        BufferedImage[] fallingSprites = Arrays.copyOfRange(sprites, 32, 39);
+        BufferedImage[] attackSprites = Arrays.copyOfRange(sprites, 8, 13);
+        BufferedImage[] runSprites = Arrays.copyOfRange(sprites, 16, 23);
+
+        BufferedImage[] launchSprites = Arrays.copyOfRange(sprites, 24, 25);
+        BufferedImage[] jumpSprites = Arrays.copyOfRange(sprites, 26, 29);
+        BufferedImage[] apexSprites = Arrays.copyOfRange(sprites, 30, 32);
+        BufferedImage[] fallSprites = Arrays.copyOfRange(sprites, 33, 36);
+        BufferedImage[] landSprites = Arrays.copyOfRange(sprites, 37, 39);
 
         // Create Animations
         Animation idleAnimation = new Animation(idleSprites, 60);
-        Animation attackingAnimation = new Animation(attackingSprites, 60);
-        Animation runningAnimation = new Animation(runningSprites, 48);
-        Animation jumpingAnimation = new Animation(jumpingSprites, 60);
-        Animation fallingAnimation = new Animation(fallingSprites, 60);
+        Animation attackAnimation = new Animation(attackSprites, 60);
+        Animation runAnimation = new Animation(runSprites, 48);
 
-        return new PlayerAnimator(new Animation[] { idleAnimation, attackingAnimation, runningAnimation,
-                jumpingAnimation, fallingAnimation }, 0);
+        Animation launchAnimation = new Animation(launchSprites, 60);
+        Animation jumpAnimation = new Animation(jumpSprites, 60);
+        Animation apexAnimation = new Animation(apexSprites, 60);
+        Animation fallAnimation = new Animation(fallSprites, 60);
+        Animation landAnimation = new Animation(landSprites, 60);
+
+        return new PlayerAnimator(new Animation[] { idleAnimation, attackAnimation, runAnimation,
+                launchAnimation, jumpAnimation, apexAnimation, fallAnimation, landAnimation }, 0);
     }
 }
