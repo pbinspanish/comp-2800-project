@@ -68,33 +68,56 @@ public class GameObject implements Serializable, Comparable<GameObject> {
      * Determines whether this GameObject is colliding with the given GameObject.
      * 
      * @param go The GameObject to check for collision with.
-     * @return True if this GameObject is colliding with the given GameObject, false
-     *         otherwise.
+     * @return An array of booleans. Each index corresponds to an edge (given in the
+     *         method). If any of the four booleans are true, there was a collision.
      */
-    public boolean isCollidingWith(GameObject go) {
-        boolean collidesHorizontally = false;
-        boolean collidesVertically = false;
+    public boolean[] isCollidingWith(GameObject go) {
+        boolean[] out = new boolean[4];
+        out[0] = false;
+        out[1] = false;
+        out[2] = false;
+        out[3] = false;
 
+        int aX1 = this.x;
+        int aY1 = this.y;
+        int aX2 = this.x + this.width;
+        int aY2 = this.y + this.height;
+
+        int bX1 = go.x;
+        int bY1 = go.y;
+        int bX2 = go.x + go.width;
+        int bY2 = go.y + go.height;
+
+        // Determine if we collided
+        boolean collided = false;
+        if (aX1 < bX2 && aX2 > bX1 && aY1 < bY2 && aY2 > bY1) {
+            collided = true;
+        }
+
+        if (!collided)
+            return out;
+
+        // Figure out which edges collided
         // left edge of this object is within go
-        if (this.x >= go.x && this.x <= go.x + go.width) {
-            collidesHorizontally = true;
+        if (aX1 > bX1 && aX1 < bX2) {
+            out[0] = true;
         }
 
         // right edge of this object is within go
-        if (this.x + this.width >= go.x && this.x + this.width <= go.x + go.width) {
-            collidesHorizontally = true;
+        if (aX2 > bX1 && aX2 < bX2) {
+            out[1] = true;
         }
 
         // top edge of this object is within go
-        if (this.y >= go.y && this.y <= go.y + go.height) {
-            collidesVertically = true;
+        if (aY1 > bY1 && aY1 < bY2) {
+            out[2] = true;
         }
 
         // bottom edge of this object is within go
-        if (this.y + this.height >= go.y && this.y + this.height <= go.y + go.height) {
-            collidesVertically = true;
+        if (aY2 > bY1 && aY2 < bY2) {
+            out[3] = true;
         }
 
-        return collidesHorizontally & collidesVertically;
+        return out;
     }
 }

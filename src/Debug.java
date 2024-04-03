@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Contains methods for displaying debug information.
@@ -13,14 +14,17 @@ public class Debug extends GameObject {
     public long maxTickTime = 0;
     public long maxRenderTime = 0;
 
-    // Controls
+    public static ArrayList<String> debugStrings;
+    public static ArrayList<Block> collidedBlocks;
+
     public static boolean DELETE_CHUNKS_ON_LOAD = true;
-    public static boolean SHOW_GRIDLINES = false;
-    public static boolean SHOW_CROSSHAIR = false;
-    public static boolean SHOW_PLAYER_RENDER_BOUNDS = false;
-    public static boolean SHOW_CAMERA_BUFFER_BOUNDS = false;
-    public static boolean SHOW_CHUNK_BOUNDS = true;
-    public static boolean SHOW_CHUNK_COORDINATE_LABELS = true;
+    public boolean SHOW_GRIDLINES = false;
+    public boolean SHOW_CROSSHAIR = false;
+    public boolean SHOW_PLAYER_RENDER_BOUNDS = false;
+    public boolean SHOW_CAMERA_BUFFER_BOUNDS = false;
+    public boolean SHOW_CHUNK_BOUNDS = true;
+    public boolean SHOW_CHUNK_COORDINATE_LABELS = true;
+    public boolean SHOW_COLLIDED_BLOCKS = true;
 
     public Debug(Player player, Camera camera, ChunkManager cm, GameCanvas gc) {
         this.player = player;
@@ -28,9 +32,23 @@ public class Debug extends GameObject {
         this.cm = cm;
         this.gc = gc;
 
+        Debug.debugStrings = new ArrayList<String>();
+        Debug.collidedBlocks = new ArrayList<Block>();
+
         if (DELETE_CHUNKS_ON_LOAD) {
             deleteChunks();
         }
+    }
+
+    @Override
+    public void tick(InputManager im) {
+        this.SHOW_GRIDLINES = im.SHOW_GRIDLINES;
+        this.SHOW_CROSSHAIR = im.SHOW_CROSSHAIR;
+        this.SHOW_PLAYER_RENDER_BOUNDS = im.SHOW_PLAYER_RENDER_BOUNDS;
+        this.SHOW_CAMERA_BUFFER_BOUNDS = im.SHOW_CAMERA_BUFFER_BOUNDS;
+        this.SHOW_CHUNK_BOUNDS = im.SHOW_CHUNK_BOUNDS;
+        this.SHOW_CHUNK_COORDINATE_LABELS = im.SHOW_CHUNK_COORDINATE_LABELS;
+        this.SHOW_COLLIDED_BLOCKS = im.SHOW_COLLIDED_BLOCKS;
     }
 
     @Override
@@ -48,21 +66,22 @@ public class Debug extends GameObject {
             drawChunkBounds(g2d);
         if (SHOW_CHUNK_COORDINATE_LABELS)
             drawChunkCoordinateLabels(g2d);
+        if (SHOW_COLLIDED_BLOCKS)
+            drawCollidedBlocks(g2d);
 
         // Initialize Debug Strings
-        String[] debug = new String[7];
-        
-        debug[0] = "Player X: " + player.x + " Y: " + player.y;
-        debug[1] = "Camera X: " + camera.x + " Y: " + camera.y;
+        debugStrings.add(0, "Player X: " + player.x + " Y: " + player.y);
+        debugStrings.add(1, "Camera X: " + camera.x + " Y: " + camera.y);
 
         int playerScreenCoordinateX = camera.worldXToScreenX(player.x);
         int playerScreenCoordinateY = camera.worldYToScreenY(player.y);
-        debug[2] = "Player Screen Coordinates X: " + playerScreenCoordinateX + " Y: " + playerScreenCoordinateY;
+        debugStrings.add(2, "Player Screen Coordinates X: " + playerScreenCoordinateX + " Y: " + playerScreenCoordinateY);
 
-        debug[3] = "Visible Chunks: ";
+        String visibleChunks = "Visible Chunks: ";
         for (Chunk chunk : cm.loadedChunks.values()) {
-            debug[3] += chunk.getID() + " ";
+            visibleChunks += chunk.getID() + " ";
         }
+        debugStrings.add(3, visibleChunks);
 
         if (maxRenderTime < gc.lastRenderTime) {
             maxRenderTime = gc.lastRenderTime;
@@ -72,20 +91,21 @@ public class Debug extends GameObject {
             maxTickTime = gc.lastTickTime;
         }
 
-        debug[4] = "Last Frame: " + (gc.lastRenderTime + gc.lastTickTime) + "ms Render: " + gc.lastRenderTime
-                + "ms Tick: " + gc.lastTickTime + "ms";
-        debug[5] = "Max Render: " + maxRenderTime + "ms Max Tick: " + maxTickTime + "ms";
+        debugStrings.add(4, "Last Frame: " + (gc.lastRenderTime + gc.lastTickTime) + "ms Render: " + gc.lastRenderTime
+                + "ms Tick: " + gc.lastTickTime + "ms");
+        debugStrings.add(5, "Max Render: " + maxRenderTime + "ms Max Tick: " + maxTickTime + "ms");
 
         int playerScreenPositionCenterX = camera.worldXToScreenX(player.x + (player.width / 2));
         int playerScreenPositionCenterY = camera.worldYToScreenY(player.y + (player.height / 2));
-        debug[6] = "Player Center Screen Coordinates: " + playerScreenPositionCenterX + " "
-                + playerScreenPositionCenterY;
+        debugStrings.add(6, "Player Center Screen Coordinates: " + playerScreenPositionCenterX + " "
+                + playerScreenPositionCenterY);
 
         // Draw Debug Strings
-        for (int i = 0; i < debug.length; i++) {
-            drawString(g2d, debug[i], i + 1);
+        for (int i = 0; i < debugStrings.size(); i++) {
+            drawString(g2d, debugStrings.get(i), i + 1);
         }
 
+        debugStrings = new ArrayList<String>();
     }
 
     /**
@@ -97,7 +117,7 @@ public class Debug extends GameObject {
      * @param row   The row in which to draw the string.
      */
     public void drawString(Graphics2D g2d, String input, int row) {
-        Font font = new Font("Trebuchet MS", Font.BOLD, 18);
+        Font font = new Font("Consolas", Font.PLAIN, 18);
         g2d.setFont(font);
 
         FontMetrics fm = g2d.getFontMetrics();
@@ -162,8 +182,8 @@ public class Debug extends GameObject {
      */
     public void drawCameraBufferBound(Graphics2D g2d) {
         g2d.setColor(Color.RED);
-        g2d.drawRect((camera.width / 2) - camera.OFFSET_X, (camera.height / 2) - player.y, camera.OFFSET_X * 2,
-                player.height);
+        g2d.drawRect((camera.width / 2) - camera.OFFSET_X, camera.worldYToScreenY(player.y), camera.OFFSET_X * 2,
+        player.height);
     }
 
     /**
@@ -218,6 +238,25 @@ public class Debug extends GameObject {
         for (String s : entries) {
             File currentFile = new File(chunksFolder.getPath(), s);
             currentFile.delete();
+        }
+    }
+
+    public void drawCollidedBlocks(Graphics2D g2d) {
+        if (collidedBlocks != null) {
+            for (Block block : collidedBlocks) {
+                g2d.setColor(Color.RED);
+    
+                int blockX = camera.worldXToScreenX(block.getBlockWorldX());
+                int blockY = camera.worldYToScreenY(block.getBlockWorldY());
+    
+                g2d.drawRect(blockX, blockY, 1, Block.BLOCK_SIZE);
+                g2d.drawRect(blockX + Block.BLOCK_SIZE, blockY, 1, Block.BLOCK_SIZE);
+    
+                g2d.drawRect(blockX, blockY, Block.BLOCK_SIZE, 1);
+                g2d.drawRect(blockX, blockY + Block.BLOCK_SIZE, Block.BLOCK_SIZE, 1);
+            }
+            
+            collidedBlocks = null;
         }
     }
 }

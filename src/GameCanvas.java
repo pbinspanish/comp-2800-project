@@ -51,7 +51,7 @@ public class GameCanvas extends Canvas implements Runnable {
         this.gm.addGameObject(bg);
 
         // Initialize Player
-        this.player = new Player(0, 0, 10000);
+        this.player = new Player(0, -64, 10000);
         this.gm.addGameObject(player);
 
         // Initialize Camera
@@ -63,6 +63,7 @@ public class GameCanvas extends Canvas implements Runnable {
         // Initialize Chunk Manager
         this.chunkManager = new ChunkManager("save1", player, camera);
         this.gm.addGameObject(chunkManager);
+        this.player.cm = chunkManager;
 
         // Initialize Inventory
         this.inventory = new Inventory();
@@ -122,15 +123,27 @@ public class GameCanvas extends Canvas implements Runnable {
     }
 
     public void render() {
-        // Initialize Graphics2D Renderer
-        Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // render() all GameObjects
-        gm.render(g2d);
-
-        // End Drawing
-        g2d.dispose();
-        bs.show();
+        Graphics2D g2d = null;
+        do {
+            do {
+                try {
+                    // Initialize Graphics2D Renderer
+                    g2d = (Graphics2D) bs.getDrawGraphics();
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    
+                    // render() all GameObjects
+                    gm.render(g2d);
+                }
+                finally {
+                    // End Drawing
+                    g2d.dispose();
+                }
+        
+            }
+            while (bs.contentsRestored());
+            
+            bs.show();
+        }
+        while (bs.contentsLost());
     }
 }

@@ -1,16 +1,21 @@
 import java.awt.image.*;
-import java.io.Serializable;
 
 /**
  * Contains the definition of a block object and related static methods.
  */
-public class Block implements Serializable {
+public class Block extends GameObject {
+    // x and y refer to the block's position within the chunk
+    
     public static final int BLOCK_SIZE = 32;
     private static BufferedImage[] blockSprites;
 
     private String type;
+    private Chunk parent;
 
-    public Block(String type) {
+    public Block(int x, int y, Chunk parent, String type) {
+        this.x = x;
+        this.y = y;
+        this.parent = parent;
         this.type = type;
     }
 
@@ -85,6 +90,30 @@ public class Block implements Serializable {
      */
     public static int getBlockWorldY(int chunkY, int blockY) {
         return chunkY * Chunk.CHUNK_HEIGHT_WORLD + blockY * BLOCK_SIZE;
+    }
+
+    /**
+     * Gets the x-coordinate of the block on the world grid.
+     * 
+     * @param chunkX The x-coordinate of the chunk this block is contained in.
+     * @param blockX The x-coordinate of the block within the chunk, on the block
+     *               grid.
+     * @return The x-coordinate of the block on the world grid.
+     */
+    public int getBlockWorldX() {
+        return parent.x * Chunk.CHUNK_WIDTH_WORLD + this.x * BLOCK_SIZE;
+    }
+
+    /**
+     * Gets the y-coordinate of the block on the world grid.
+     * 
+     * @param chunkY The y-coordinate of the chunk this block is contained in.
+     * @param blockY The y-coordinate of the block within the chunk, on the block
+     *               grid.
+     * @return The y-coordinate of the block on the world grid.
+     */
+    public int getBlockWorldY() {
+        return parent.y * Chunk.CHUNK_HEIGHT_WORLD + this.y * BLOCK_SIZE;
     }
 
     /**

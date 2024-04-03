@@ -181,4 +181,26 @@ public class ChunkManager extends GameObject {
             chunk.render(g2d);
         }
     }
+
+    public Chunk[] locatedIn(int x, int y, int width, int height) {
+        Chunk[] locatedIn = new Chunk[4]; // an object can be in a max of four chunks at once
+        int numChunksIn = 0;
+
+        int minChunkX = (int) Math.floor((double) x / (double) Chunk.CHUNK_WIDTH_WORLD);     // ceil and floor for the minimum possible chunks
+        int maxChunkX = (int) Math.floor(((double) x + (double) width) / (double) Chunk.CHUNK_WIDTH_WORLD);
+
+        int minChunkY = (int) Math.floor((double) y / (double) Chunk.CHUNK_WIDTH_WORLD);
+        int maxChunkY = (int) Math.floor(((double) y + (double) height) / (double) Chunk.CHUNK_WIDTH_WORLD);
+
+        for (Chunk chunk : loadedChunks.values()) {
+            if (chunk.x < minChunkX || chunk.x > maxChunkX || chunk.y < minChunkY || chunk.y > maxChunkY) {
+            }
+            else {
+                locatedIn[numChunksIn] = chunk;
+                numChunksIn++;    
+            }
+        }
+
+        return locatedIn;
+    }
 }

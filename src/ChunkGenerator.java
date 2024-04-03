@@ -25,6 +25,7 @@ public class ChunkGenerator {
 	 */
 	public static Chunk generateChunk(int x, int y, Camera camera) {
 		Block[][] blocks = new Block[Chunk.CHUNK_WIDTH][Chunk.CHUNK_HEIGHT];
+		Chunk newChunk = new Chunk(x, y, blocks, camera);
 		String blockType;
 
 		for (int i = 0; i < Chunk.CHUNK_WIDTH; i++) {
@@ -46,11 +47,12 @@ public class ChunkGenerator {
 					// Otherwise, generate blocks based on random type
 					blockType = placeUnderground();
 				}
-				blocks[i][j] = new Block(blockType);
+
+				blocks[i][j] = new Block(i, j, newChunk, blockType);
 			}
 		}
 
-		Chunk newChunk = new Chunk(x, y, blocks, camera);
+		newChunk.blocks = blocks;
 		return newChunk;
 	}
 

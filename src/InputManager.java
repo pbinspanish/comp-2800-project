@@ -4,16 +4,25 @@ import java.awt.event.*;
 /// Handles user input.
 ///
 public class InputManager implements KeyListener {
+    // Debug Flags
+    public boolean SHOW_GRIDLINES = false;
+    public boolean SHOW_CROSSHAIR = false;
+    public boolean SHOW_PLAYER_RENDER_BOUNDS = false;
+    public boolean SHOW_CAMERA_BUFFER_BOUNDS = false;
+    public boolean SHOW_CHUNK_BOUNDS = false;
+    public boolean SHOW_CHUNK_COORDINATE_LABELS = false;
+    public boolean SHOW_COLLIDED_BLOCKS = true;
 
+    // Player Flags
     public int dir = 0; // -1 = Left, 0 = Idle, 1 = Right
     public boolean jumping = false;
     private boolean eKeyPressedLastTime = false; // Track if "E" was pressed last time
-
 
     @Override
     // set flags from pressed keys
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
+            // Movement
             case KeyEvent.VK_SPACE:
                 jumping = true;
                 break;
@@ -27,16 +36,42 @@ public class InputManager implements KeyListener {
             case KeyEvent.VK_RIGHT:
                 dir = 1;
                 break;
+
+            // Inventory
             case KeyEvent.VK_E:
                 // Toggle full inventory display only if "E" wasn't pressed last time
                 if (!eKeyPressedLastTime) {
                     Inventory.displayFullInventory = true;
                     eKeyPressedLastTime = true; // Update the flag
-                }else{
+                } else {
                     Inventory.displayFullInventory = false;
                     eKeyPressedLastTime = false; // Update the flag
                 }
                 break;
+
+            // Debug
+            case KeyEvent.VK_0:
+                SHOW_GRIDLINES = !SHOW_GRIDLINES;
+                break;
+            case KeyEvent.VK_1:
+                SHOW_CROSSHAIR = !SHOW_CROSSHAIR;
+                break;
+            case KeyEvent.VK_2:
+                SHOW_PLAYER_RENDER_BOUNDS = !SHOW_PLAYER_RENDER_BOUNDS;
+                break;
+            case KeyEvent.VK_3:
+                SHOW_CAMERA_BUFFER_BOUNDS = !SHOW_CAMERA_BUFFER_BOUNDS;
+                break;
+            case KeyEvent.VK_4:
+                SHOW_CHUNK_BOUNDS = !SHOW_CHUNK_BOUNDS;
+                break;
+            case KeyEvent.VK_5:
+                SHOW_CHUNK_COORDINATE_LABELS = !SHOW_CHUNK_COORDINATE_LABELS;
+                break;
+            case KeyEvent.VK_6:
+                SHOW_COLLIDED_BLOCKS = !SHOW_COLLIDED_BLOCKS;
+                break;
+
         }
     }
 
@@ -60,9 +95,9 @@ public class InputManager implements KeyListener {
         }
     }
 
-    ///
-    /// Note: Unused for game input.
-    ///
+    /**
+     * Note: unused for game input.
+     */
     @Override
     public void keyTyped(KeyEvent e) {
 
