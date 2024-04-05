@@ -48,4 +48,7 @@ public class Item implements Serializable {
     }
 
 
+    public void updateItemQuantity(int quantity) {
+        itemQuantity+=quantity;
+    }
 }

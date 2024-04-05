@@ -71,7 +71,7 @@ public class GameCanvas extends Canvas implements Runnable {
         this.inventory = new Inventory();
         this.gm.addGameObject(inventory);
 
-        this.blockInteractionManager = new BlockInteractionManager(chunkManager, player);
+        this.blockInteractionManager = new BlockInteractionManager(chunkManager, player, inventory);
         this.gm.addGameObject(blockInteractionManager);
 
 

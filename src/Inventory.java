@@ -36,7 +36,7 @@ public class Inventory extends GameObject implements Serializable {
     public void render(Graphics2D graphics2D){
         if(displayFullInventory){
             graphics2D.drawImage(fullInventory, (GameCanvas.GAME_WIDTH - FULL_INVENTORY_WIDTH) / 2, (GameCanvas.GAME_HEIGHT - FULL_INVENTORY_HEIGHT) / 2, null);
-
+            
         }
         else{
             int x = 5;
@@ -47,13 +47,16 @@ public class Inventory extends GameObject implements Serializable {
             for(int i = 0; i < INVENTORY_SLOT_NUMBER; i++){
                 graphics2D.drawImage(inventorySlot, x, INVENTORY_Y, SLOT_SIZE, SLOT_SIZE, null);
                 if (i < itemList.size()) {
+
                     Item item = itemList.get(i);
                     BufferedImage itemImage = item.getItemImage(item.getItemName());
                     int xOffset = (SLOT_SIZE - itemImage.getWidth()) / 2; // Calculate horizontal offset
                     int yOffset = (SLOT_SIZE - itemImage.getHeight()) / 2; // Calculate vertical offset
                     graphics2D.drawImage(itemImage, x + xOffset, INVENTORY_Y + yOffset, null);
                     int quantity = item.getItemQuantity();
+
                     if (quantity >= 1) {
+
                         String quantityString = String.valueOf(quantity);
                         int textX = x + SLOT_SIZE - 5 - graphics2D.getFontMetrics().stringWidth(quantityString);
                         int textY = INVENTORY_Y + SLOT_SIZE - 5; // Adjust the vertical position as needed
@@ -67,10 +70,18 @@ public class Inventory extends GameObject implements Serializable {
         }
     }
 
-    public void addItem(Item item){
-        itemList.add(item);
+    public void addItem(Item newItem) {
+        for (Item existingItem : itemList) {
+            if (existingItem.getItemName().equals(newItem.getItemName())) {
+                existingItem.updateItemQuantity(newItem.getItemQuantity());
+                updateInventoryFile();
+                return;
+            }
+        }
+        itemList.add(newItem);
         updateInventoryFile();
     }
+
     public void removeItem(Item item){
         itemList.remove(item);
         updateInventoryFile();
