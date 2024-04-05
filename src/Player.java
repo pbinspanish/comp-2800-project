@@ -117,7 +117,7 @@ public class Player extends GameObject {
                         // 3. Resolve x collision
                         if (collisions[0]) {
                             // left edge collided
-                            this.x += this.x - block.getBlockWorldX() + Block.BLOCK_SIZE;
+                            this.x += block.getBlockWorldX() - this.x + Block.BLOCK_SIZE;
                             collidedBlocks.add(block);
                         }
                         if (collisions[1]) {
@@ -154,7 +154,7 @@ public class Player extends GameObject {
                         // 6. Resolve y collision
                         if (collisions[2]) {
                             // top edge collided
-                            this.y += this.y - block.getBlockWorldY() + Block.BLOCK_SIZE;
+                            this.y += block.getBlockWorldY() - this.y + Block.BLOCK_SIZE;
                             collidedBlocks.add(block);
                         }
                         if (collisions[3]) {
