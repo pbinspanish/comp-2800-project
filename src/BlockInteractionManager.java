@@ -38,7 +38,6 @@ public class BlockInteractionManager extends GameObject {
                     chunk.breakBlock(blockX % Chunk.CHUNK_WIDTH_WORLD, blockY % Chunk.CHUNK_HEIGHT_WORLD);
                     if (!block.getType().equals("AIR")) {
                         inventory.addItem(new Item(block.getType(), 1)); // Add the broken block to the inventory
-                        System.out.println("ADD");
                     }
 
                 }
