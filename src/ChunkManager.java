@@ -13,7 +13,7 @@ public class ChunkManager extends GameObject {
     private String saveName;
     public String savePath;
 
-    private Camera camera;
+    Camera camera;
 
     public HashMap<String, Chunk> loadedChunks;
 
@@ -46,7 +46,7 @@ public class ChunkManager extends GameObject {
     /**
      * Loads the Chunk from disk with the given ID.
      *
-     * @param id The ID of the Chunk to load.
+     *
      * @return The loaded Chunk.
      */
     public Chunk loadChunk(int x, int y) {
@@ -79,7 +79,9 @@ public class ChunkManager extends GameObject {
         Chunk load = loadChunk(x, y);
 
         if (load == null) {
-            return ChunkGenerator.generateChunk(x, y, camera);
+           Chunk chunk = ChunkGenerator.generateChunk(x, y, camera);
+           saveChunk(chunk);
+           return chunk;
         } else {
             return load;
         }
@@ -114,6 +116,7 @@ public class ChunkManager extends GameObject {
         saveChunk(loadedChunks.get(Chunk.getID(x, y)));
         loadedChunks.remove(Chunk.getID(x, y));
     }
+
 
     /**
      * Determines whether the Chunk with the given ID is loaded.
@@ -186,21 +189,19 @@ public class ChunkManager extends GameObject {
         Chunk[] locatedIn = new Chunk[4]; // an object can be in a max of four chunks at once
         int numChunksIn = 0;
 
-        int minChunkX = (int) Math.floor((double) x / (double) Chunk.CHUNK_WIDTH_WORLD);     // ceil and floor for the minimum possible chunks
+        int minChunkX = (int) Math.floor((double) x / (double) Chunk.CHUNK_WIDTH_WORLD);
         int maxChunkX = (int) Math.floor(((double) x + (double) width) / (double) Chunk.CHUNK_WIDTH_WORLD);
 
         int minChunkY = (int) Math.floor((double) y / (double) Chunk.CHUNK_WIDTH_WORLD);
         int maxChunkY = (int) Math.floor(((double) y + (double) height) / (double) Chunk.CHUNK_WIDTH_WORLD);
 
         for (Chunk chunk : loadedChunks.values()) {
-            if (chunk.x < minChunkX || chunk.x > maxChunkX || chunk.y < minChunkY || chunk.y > maxChunkY) {
-            }
-            else {
-                locatedIn[numChunksIn] = chunk;
-                numChunksIn++;    
+            if (chunk.x >= minChunkX && chunk.x <= maxChunkX && chunk.y >= minChunkY && chunk.y <= maxChunkY) {
+                locatedIn[numChunksIn++] = chunk;
             }
         }
 
         return locatedIn;
     }
+
 }

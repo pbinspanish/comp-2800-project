@@ -125,4 +125,7 @@ public class Block extends GameObject {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
 }

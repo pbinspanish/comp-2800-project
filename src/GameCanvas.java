@@ -27,6 +27,7 @@ public class GameCanvas extends Canvas implements Runnable {
     private Background bg;
 
     // Logic
+    private BlockInteractionManager blockInteractionManager;
     private ChunkManager chunkManager;
     private Camera camera;
     private Player player;
@@ -42,6 +43,7 @@ public class GameCanvas extends Canvas implements Runnable {
         // Initialize Input
         this.im = new InputManager();
         this.addKeyListener(im);
+        this.addMouseListener(im);
 
         // Initialize Game Manager
         this.gm = new GameManager();
@@ -68,6 +70,10 @@ public class GameCanvas extends Canvas implements Runnable {
         // Initialize Inventory
         this.inventory = new Inventory();
         this.gm.addGameObject(inventory);
+
+        this.blockInteractionManager = new BlockInteractionManager(chunkManager, player);
+        this.gm.addGameObject(blockInteractionManager);
+
 
         // Debug
         if (SHOW_DEBUG_GRAPHICS) {

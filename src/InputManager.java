@@ -1,9 +1,10 @@
+import javax.swing.event.MouseInputListener;
 import java.awt.event.*;
 
 ///
 /// Handles user input.
 ///
-public class InputManager implements KeyListener {
+public class InputManager implements KeyListener, MouseListener {
     // Debug Flags
     public boolean SHOW_GRIDLINES = false;
     public boolean SHOW_CROSSHAIR = false;
@@ -13,10 +14,15 @@ public class InputManager implements KeyListener {
     public boolean SHOW_CHUNK_COORDINATE_LABELS = false;
     public boolean SHOW_COLLIDED_BLOCKS = true;
 
+
     // Player Flags
     public int dir = 0; // -1 = Left, 0 = Idle, 1 = Right
     public boolean jumping = false;
     private boolean eKeyPressedLastTime = false; // Track if "E" was pressed last time
+    public boolean leftClicked = false;
+    public boolean rightClicked = false;
+    public int mouseX;
+    public int mouseY;
 
     @Override
     // set flags from pressed keys
@@ -100,6 +106,43 @@ public class InputManager implements KeyListener {
      */
     @Override
     public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if(e.getButton() == MouseEvent.BUTTON1){ //Break Block
+            leftClicked = true;
+        }
+        if(e.getButton() == MouseEvent.BUTTON3){ //Place Block
+            rightClicked = true;
+        }
+        mouseX = e.getX();
+        mouseY = e.getY();
+    }
+
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if(e.getButton() == MouseEvent.BUTTON1){
+            leftClicked = false;
+        }
+        if(e.getButton() == MouseEvent.BUTTON2){
+            rightClicked = false;
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 }

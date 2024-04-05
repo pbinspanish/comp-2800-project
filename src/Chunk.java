@@ -43,6 +43,20 @@ public class Chunk extends GameObject {
             }
         }
     }
+    public void placeBlock(int x, int y, String type) {
+        if (x >= 0 && x < CHUNK_WIDTH && y >= 0 && y < CHUNK_HEIGHT) {
+            if(blocks[x][y].getType().equals("AIR")) { //check if no block is in location
+                blocks[x][y] = new Block(x, y, this, type);
+            }
+        }
+    }
+
+    public void breakBlock(int x, int y) {
+        if (x >= 0 && x < CHUNK_WIDTH && y >= 0 && y < CHUNK_HEIGHT) {
+            blocks[x][y] = new Block(x, y, this, "AIR");
+        }
+    }
+
 
     /**
      * Gets the ID of the chunk with the given coordinates, used for reading and writing from disk.
