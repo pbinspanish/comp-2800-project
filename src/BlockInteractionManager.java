@@ -43,13 +43,16 @@ public class BlockInteractionManager extends GameObject {
 
                 }
             }
-
             if (inputManager.rightClicked) {
                 // Place a block at the calculated coordinates
-                chunkManager.loadedChunks.values().forEach(chunk -> chunk.placeBlock(blockX, blockY, "STONE")); // Change "STONE" to the desired block type
-                // Unload the chunk after placing the block
-                chunkManager.unloadChunk(blockX / Chunk.CHUNK_WIDTH_WORLD, blockY / Chunk.CHUNK_HEIGHT_WORLD);
+                Chunk chunk = chunkManager.loadedChunks.get(Chunk.getID(blockX / Chunk.CHUNK_WIDTH_WORLD, blockY / Chunk.CHUNK_HEIGHT_WORLD));
+                if (chunk != null) {
+                    chunk.placeBlock(blockX % Chunk.CHUNK_WIDTH_WORLD, blockY % Chunk.CHUNK_HEIGHT_WORLD, "STONE"); // Change "STONE" to the desired block type
+                }
+                // Reset the rightClicked flag after processing
+                inputManager.rightClicked = false;
             }
+
         }
     }
 
