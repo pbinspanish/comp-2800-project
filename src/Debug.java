@@ -17,14 +17,15 @@ public class Debug extends GameObject {
     public static ArrayList<String> debugStrings;
     public static ArrayList<Block> collidedBlocks;
 
-    public static boolean DELETE_CHUNKS_ON_LOAD = true;
+    public static boolean DELETE_CHUNKS_ON_LOAD = false;
     public boolean SHOW_GRIDLINES = false;
     public boolean SHOW_CROSSHAIR = false;
     public boolean SHOW_PLAYER_RENDER_BOUNDS = false;
     public boolean SHOW_CAMERA_BUFFER_BOUNDS = false;
-    public boolean SHOW_CHUNK_BOUNDS = true;
-    public boolean SHOW_CHUNK_COORDINATE_LABELS = true;
-    public boolean SHOW_COLLIDED_BLOCKS = true;
+    public boolean SHOW_CHUNK_BOUNDS = false;
+    public boolean SHOW_CHUNK_COORDINATE_LABELS = false;
+    public boolean SHOW_COLLIDED_BLOCKS = false;
+    public boolean SHOW_DEBUG_INFO = false;
 
     public Debug(Player player, Camera camera, ChunkManager cm, GameCanvas gc) {
         this.player = player;
@@ -49,6 +50,7 @@ public class Debug extends GameObject {
         this.SHOW_CHUNK_BOUNDS = im.SHOW_CHUNK_BOUNDS;
         this.SHOW_CHUNK_COORDINATE_LABELS = im.SHOW_CHUNK_COORDINATE_LABELS;
         this.SHOW_COLLIDED_BLOCKS = im.SHOW_COLLIDED_BLOCKS;
+        this.SHOW_DEBUG_INFO = im.SHOW_DEBUG_INFO;
     }
 
     @Override
@@ -101,10 +103,12 @@ public class Debug extends GameObject {
                 + playerScreenPositionCenterY);
 
         // Draw Debug Strings
-        for (int i = 0; i < debugStrings.size(); i++) {
-            drawString(g2d, debugStrings.get(i), i + 1);
+        if (SHOW_DEBUG_INFO) {
+            for (int i = 0; i < debugStrings.size(); i++) {
+                drawString(g2d, debugStrings.get(i), i + 1);
+            }
         }
-
+        
         debugStrings = new ArrayList<String>();
     }
 

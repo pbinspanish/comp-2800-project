@@ -1,4 +1,3 @@
-import javax.swing.event.MouseInputListener;
 import java.awt.event.*;
 
 ///
@@ -12,7 +11,8 @@ public class InputManager implements KeyListener, MouseListener {
     public boolean SHOW_CAMERA_BUFFER_BOUNDS = false;
     public boolean SHOW_CHUNK_BOUNDS = false;
     public boolean SHOW_CHUNK_COORDINATE_LABELS = false;
-    public boolean SHOW_COLLIDED_BLOCKS = true;
+    public boolean SHOW_COLLIDED_BLOCKS = false;
+    public boolean SHOW_DEBUG_INFO = false;
 
 
     // Player Flags
@@ -107,6 +107,8 @@ public class InputManager implements KeyListener, MouseListener {
             case KeyEvent.VK_F7:
                 SHOW_COLLIDED_BLOCKS = !SHOW_COLLIDED_BLOCKS;
                 break;
+            case KeyEvent.VK_F8:
+                SHOW_DEBUG_INFO = !SHOW_DEBUG_INFO;
 
         }
     }
