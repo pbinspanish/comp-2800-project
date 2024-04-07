@@ -37,22 +37,33 @@ public class BlockInteractionManager extends GameObject {
                     Block block = chunk.blocks[blockX % Chunk.CHUNK_WIDTH_WORLD][blockY % Chunk.CHUNK_HEIGHT_WORLD];
                     chunk.breakBlock(blockX % Chunk.CHUNK_WIDTH_WORLD, blockY % Chunk.CHUNK_HEIGHT_WORLD);
                     if (!block.getType().equals("AIR")) {
-                        inventory.addItem(new Item(block.getType(), 1)); // Add the broken block to the inventory
+                        // Add the broken block to the inventory
+                        Item newItem = new Item(block.getType(), 1);
+                        inventory.addItem(newItem); // Adding item to the inventory
                     }
-
                 }
             }
             if (inputManager.rightClicked) {
-                // Place a block at the calculated coordinates
-                Chunk chunk = chunkManager.loadedChunks.get(Chunk.getID(blockX / Chunk.CHUNK_WIDTH_WORLD, blockY / Chunk.CHUNK_HEIGHT_WORLD));
-                if (chunk != null) {
-                    chunk.placeBlock(blockX % Chunk.CHUNK_WIDTH_WORLD, blockY % Chunk.CHUNK_HEIGHT_WORLD, "STONE"); // Change "STONE" to the desired block type
+                // Ensure there is a selected item in the inventory
+                Item selectedItem = inventory.getSelectedItem();
+                if (selectedItem != null) {
+                    // Check if the target block is air
+                    Chunk chunk = chunkManager.loadedChunks.get(Chunk.getID(blockX / Chunk.CHUNK_WIDTH_WORLD, blockY / Chunk.CHUNK_HEIGHT_WORLD));
+                    if (chunk != null) {
+                        Block targetBlock = chunk.blocks[blockX % Chunk.CHUNK_WIDTH_WORLD][blockY % Chunk.CHUNK_HEIGHT_WORLD];
+                        if (targetBlock.getType().equals("AIR")) {
+                            // Place a block at the calculated coordinates
+                            chunk.placeBlock(blockX % Chunk.CHUNK_WIDTH_WORLD, blockY % Chunk.CHUNK_HEIGHT_WORLD, selectedItem.getItemName());
+                            inventory.removeItem(selectedItem.getSlot(), selectedItem); // Removing item from the inventory
+                        }
+                    }
                 }
                 // Reset the rightClicked flag after processing
                 inputManager.rightClicked = false;
             }
-
         }
     }
+
+
 
 }

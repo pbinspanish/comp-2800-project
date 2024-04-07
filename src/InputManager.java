@@ -21,6 +21,7 @@ public class InputManager implements KeyListener, MouseListener {
     private boolean eKeyPressedLastTime = false; // Track if "E" was pressed last time
     public boolean leftClicked = false;
     public boolean rightClicked = false;
+    public int slotSelected = 0;
     public int mouseX;
     public int mouseY;
 
@@ -55,26 +56,55 @@ public class InputManager implements KeyListener, MouseListener {
                 }
                 break;
 
-            // Debug
-            case KeyEvent.VK_0:
-                SHOW_GRIDLINES = !SHOW_GRIDLINES;
-                break;
             case KeyEvent.VK_1:
-                SHOW_CROSSHAIR = !SHOW_CROSSHAIR;
+                 slotSelected = 0;
                 break;
             case KeyEvent.VK_2:
-                SHOW_PLAYER_RENDER_BOUNDS = !SHOW_PLAYER_RENDER_BOUNDS;
+                slotSelected = 1;
                 break;
             case KeyEvent.VK_3:
-                SHOW_CAMERA_BUFFER_BOUNDS = !SHOW_CAMERA_BUFFER_BOUNDS;
+                slotSelected = 2;
                 break;
             case KeyEvent.VK_4:
-                SHOW_CHUNK_BOUNDS = !SHOW_CHUNK_BOUNDS;
+                slotSelected = 3;
                 break;
             case KeyEvent.VK_5:
-                SHOW_CHUNK_COORDINATE_LABELS = !SHOW_CHUNK_COORDINATE_LABELS;
+                slotSelected = 4;
                 break;
             case KeyEvent.VK_6:
+                slotSelected = 5;
+                break;
+            case KeyEvent.VK_7:
+                slotSelected = 6;
+
+                break;
+            case KeyEvent.VK_8:
+                slotSelected = 7;
+                break;
+            case KeyEvent.VK_9:
+                slotSelected = 8;
+                break;
+
+            // Debug
+            case KeyEvent.VK_F1:
+                SHOW_GRIDLINES = !SHOW_GRIDLINES;
+                break;
+            case KeyEvent.VK_F2:
+                SHOW_CROSSHAIR = !SHOW_CROSSHAIR;
+                break;
+            case KeyEvent.VK_F3:
+                SHOW_PLAYER_RENDER_BOUNDS = !SHOW_PLAYER_RENDER_BOUNDS;
+                break;
+            case KeyEvent.VK_F4:
+                SHOW_CAMERA_BUFFER_BOUNDS = !SHOW_CAMERA_BUFFER_BOUNDS;
+                break;
+            case KeyEvent.VK_F5:
+                SHOW_CHUNK_BOUNDS = !SHOW_CHUNK_BOUNDS;
+                break;
+            case KeyEvent.VK_F6:
+                SHOW_CHUNK_COORDINATE_LABELS = !SHOW_CHUNK_COORDINATE_LABELS;
+                break;
+            case KeyEvent.VK_F7:
                 SHOW_COLLIDED_BLOCKS = !SHOW_COLLIDED_BLOCKS;
                 break;
 
@@ -111,6 +141,9 @@ public class InputManager implements KeyListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        // Determine the selected slot based on mouse position
+        mouseX = e.getX();
+        mouseY = e.getY();
     }
 
     @Override

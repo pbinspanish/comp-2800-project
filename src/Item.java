@@ -2,8 +2,11 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 public class Item implements Serializable {
+    public static final int ITEM_HEIGHT = 64;
+    public static final int ITEM_WIDTH = 64;
     private String itemName;
     private int itemQuantity;
+    private int slot;
     private BufferedImage itemImage;
     private static BufferedImage[] blockIconSprites;
 
@@ -46,7 +49,13 @@ public class Item implements Serializable {
     public int getItemQuantity() {
         return itemQuantity;
     }
+    public int getSlot(){
+        return slot;
+    }
 
+    public void setSlot(int slot) {
+        this.slot = slot;
+    }
 
     public void updateItemQuantity(int quantity) {
         itemQuantity+=quantity;
