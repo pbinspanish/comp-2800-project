@@ -44,6 +44,7 @@ public class GameCanvas extends Canvas implements Runnable {
         this.im = new InputManager();
         this.addKeyListener(im);
         this.addMouseListener(im);
+        this.addMouseMotionListener(im);
 
         // Initialize Game Manager
         this.gm = new GameManager();
@@ -53,7 +54,7 @@ public class GameCanvas extends Canvas implements Runnable {
         this.gm.addGameObject(bg);
 
         // Initialize Player
-        this.player = new Player(0, -64, 10000);
+        this.player = new Player(0, -64, 2);
         this.gm.addGameObject(player);
 
         // Initialize Camera
@@ -68,16 +69,16 @@ public class GameCanvas extends Canvas implements Runnable {
         this.player.cm = chunkManager;
 
         // Initialize Inventory
-        this.inventory = new Inventory();
+        this.inventory = new Inventory(100);
         this.gm.addGameObject(inventory);
 
-        this.blockInteractionManager = new BlockInteractionManager(chunkManager, player, inventory);
+        this.blockInteractionManager = new BlockInteractionManager(chunkManager, player, inventory, camera, 1);
         this.gm.addGameObject(blockInteractionManager);
 
 
         // Debug
         if (SHOW_DEBUG_GRAPHICS) {
-            this.debug = new Debug(player, camera, chunkManager, this);
+            this.debug = new Debug(player, camera, chunkManager, this, 10000);
             this.gm.addGameObject(debug);
         }
     }

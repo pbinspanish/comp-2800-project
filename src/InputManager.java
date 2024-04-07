@@ -3,7 +3,7 @@ import java.awt.event.*;
 ///
 /// Handles user input.
 ///
-public class InputManager implements KeyListener, MouseListener {
+public class InputManager implements KeyListener, MouseListener, MouseMotionListener {
     // Debug Flags
     public boolean SHOW_GRIDLINES = false;
     public boolean SHOW_CROSSHAIR = false;
@@ -133,13 +133,6 @@ public class InputManager implements KeyListener, MouseListener {
         }
     }
 
-    /**
-     * Note: unused for game input.
-     */
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -156,21 +149,27 @@ public class InputManager implements KeyListener, MouseListener {
         if(e.getButton() == MouseEvent.BUTTON3){ //Place Block
             rightClicked = true;
         }
-        mouseX = e.getX();
-        mouseY = e.getY();
     }
-
 
     @Override
     public void mouseReleased(MouseEvent e) {
         if(e.getButton() == MouseEvent.BUTTON1){
             leftClicked = false;
         }
-        if(e.getButton() == MouseEvent.BUTTON2){
+        if(e.getButton() == MouseEvent.BUTTON3){
             rightClicked = false;
         }
     }
 
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+    }
+
+    /**
+     * Note: unused for game input.
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
 
@@ -178,6 +177,16 @@ public class InputManager implements KeyListener, MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent e) {
 
     }
 }

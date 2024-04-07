@@ -27,11 +27,13 @@ public class Debug extends GameObject {
     public boolean SHOW_COLLIDED_BLOCKS = false;
     public boolean SHOW_DEBUG_INFO = false;
 
-    public Debug(Player player, Camera camera, ChunkManager cm, GameCanvas gc) {
+    public Debug(Player player, Camera camera, ChunkManager cm, GameCanvas gc, int renderPriority) {
         this.player = player;
         this.camera = camera;
         this.cm = cm;
         this.gc = gc;
+
+        this.renderPriority = renderPriority;
 
         Debug.debugStrings = new ArrayList<String>();
         Debug.collidedBlocks = new ArrayList<Block>();

@@ -10,7 +10,7 @@ public class Block extends GameObject {
     private static BufferedImage[] blockSprites;
 
     private String type;
-    private Chunk parent;
+    public Chunk parent;
 
     public Block(int x, int y, Chunk parent, String type) {
         this.x = x;

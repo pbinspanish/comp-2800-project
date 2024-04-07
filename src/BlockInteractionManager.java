@@ -1,69 +1,148 @@
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 public class BlockInteractionManager extends GameObject {
-    private ChunkManager chunkManager;
+    private ChunkManager cm;
 
     private Player player;
+    private Camera camera;
     private Inventory inventory;
 
-    public BlockInteractionManager(ChunkManager chunkManager, Player player, Inventory inventory) {
-        this.chunkManager = chunkManager;
+    private Block hoveredBlock;
+    private boolean canReach = false;
+    private boolean canBreak = false;
+    private boolean canPlace = false;
+    private int reach = 3;
+
+    public BlockInteractionManager(ChunkManager cm, Player player, Inventory inventory, Camera camera,
+            int renderPriority) {
+        this.cm = cm;
         this.player = player;
+        this.camera = camera;
         this.inventory = inventory;
+
+        this.hoveredBlock = null;
+        this.renderPriority = renderPriority;
     }
 
     @Override
     public void tick(InputManager im) {
-        super.tick(im);
-        handleBlockInteractions(im);
+        hoveredBlock = mouseToBlock(im.mouseX, im.mouseY);
+
+        
+        if (hoveredBlock != null) {
+            handleBlockInteractions(im);
+        }
     }
 
-    public void handleBlockInteractions(InputManager inputManager) {
-        // Calculate the player's block coordinates relative to the camera
-        int playerBlockX = (player.x + player.width / 2) / Block.BLOCK_SIZE;
-        int playerBlockY = (player.y + player.height / 2) / Block.BLOCK_SIZE;
+    @Override
+    public void render(Graphics2D g2d) {
+        if (hoveredBlock != null) {
+            drawCollidedBlocks(g2d, hoveredBlock);
+        }
+    }
 
-        // Calculate the block coordinates relative to the camera
-        int blockX = (inputManager.mouseX + chunkManager.camera.x - chunkManager.camera.width / 2) / Block.BLOCK_SIZE;
-        int blockY = (inputManager.mouseY + chunkManager.camera.y - chunkManager.camera.height / 2) / Block.BLOCK_SIZE;
+    public Block mouseToBlock(int mouseX, int mouseY) {
+        // Determine where the mouse clicked in the world
+        int mouseWorldX = camera.screenXToWorldX(mouseX);
+        int mouseWorldY = camera.screenYToWorldY(mouseY);
 
-        // Check if the distance between the mouse position and the player's position is within 1 block
-        int distanceX = Math.abs(blockX - playerBlockX);
-        int distanceY = Math.abs(blockY - playerBlockY);
+        // Determine in which chunk the mouse is
+        Chunk[] blockChunks = cm.locatedIn(mouseWorldX, mouseWorldY, 0, 0);
+        Chunk blockChunk = null;
 
-        if (distanceX <= 1 && distanceY <= 1) {
-            if (inputManager.leftClicked) {
-                // Break the block at the calculated coordinates
-                Chunk chunk = chunkManager.loadedChunks.get(Chunk.getID(blockX / Chunk.CHUNK_WIDTH_WORLD, blockY / Chunk.CHUNK_HEIGHT_WORLD));
-                if (chunk != null) {
-                    Block block = chunk.blocks[blockX % Chunk.CHUNK_WIDTH_WORLD][blockY % Chunk.CHUNK_HEIGHT_WORLD];
-                    chunk.breakBlock(blockX % Chunk.CHUNK_WIDTH_WORLD, blockY % Chunk.CHUNK_HEIGHT_WORLD);
-                    if (!block.getType().equals("AIR")) {
-                        // Add the broken block to the inventory
-                        Item newItem = new Item(block.getType(), 1);
-                        inventory.addItem(newItem); // Adding item to the inventory
+        for (Chunk chunk : blockChunks) {
+            if (chunk != null) {
+                blockChunk = chunk;
+            }
+        }
+
+        // Determine which block in the chunk the mouse is hovered over
+        GameObject mouse = new GameObject(mouseWorldX, mouseWorldY, 0, 0);
+        for (Block[] blocks : blockChunk.blocks) {
+            for (Block block : blocks) {
+                boolean[] collisions = mouse
+                        .isCollidingWith(new GameObject(block.getBlockWorldX(), block.getBlockWorldY(),
+                                Block.BLOCK_SIZE, Block.BLOCK_SIZE));
+
+                boolean collided = false;
+                for (boolean collision : collisions) {
+                    if (collision) {
+                        collided = true;
                     }
+                }
+
+                if (collided) {
+                    return block;
                 }
             }
-            if (inputManager.rightClicked) {
-                // Ensure there is a selected item in the inventory
+        }
+
+        return null;
+    }
+
+    public void handleBlockInteractions(InputManager im) {
+        // determine whether the hovered block is reachable
+        int diffX = Math.abs(hoveredBlock.getBlockWorldX() - (player.x + (player.width / 2)));
+        int diffY = Math.abs(hoveredBlock.getBlockWorldY() - (player.y + (player.height / 2)));
+        if (diffX <= Block.BLOCK_SIZE * reach && diffY <= Block.BLOCK_SIZE * reach) {
+            canReach = true;
+
+            if (hoveredBlock.getType().compareTo("AIR") == 0) {
+                canPlace = true;
+                canBreak = false;
+            }
+            else {
+                canPlace = false;
+                canBreak = true;
+            }
+        } else {
+            canReach = false;
+            canBreak = false;
+            canPlace = false;
+        }
+
+
+        if (canReach) {
+            // Break the block
+            if (im.leftClicked && canBreak) {
+                hoveredBlock.parent.breakBlock(hoveredBlock.x, hoveredBlock.y);
+
+                // add the item to the inventory
+                if (hoveredBlock.getType().compareTo("GRASS_PLANT") != 0
+                        && hoveredBlock.getType().compareTo("FLOWER_PURPLE_PLANT") != 0
+                        && hoveredBlock.getType().compareTo("FLOWER_RED_PLANT") != 0) {
+                    Item newItem = new Item(hoveredBlock.getType(), 1);
+                    inventory.addItem(newItem);
+                }
+            }
+            // Place the block
+            else if (im.rightClicked && canPlace) {
                 Item selectedItem = inventory.getSelectedItem();
                 if (selectedItem != null) {
-                    // Check if the target block is air
-                    Chunk chunk = chunkManager.loadedChunks.get(Chunk.getID(blockX / Chunk.CHUNK_WIDTH_WORLD, blockY / Chunk.CHUNK_HEIGHT_WORLD));
-                    if (chunk != null) {
-                        Block targetBlock = chunk.blocks[blockX % Chunk.CHUNK_WIDTH_WORLD][blockY % Chunk.CHUNK_HEIGHT_WORLD];
-                        if (targetBlock.getType().equals("AIR")) {
-                            // Place a block at the calculated coordinates
-                            chunk.placeBlock(blockX % Chunk.CHUNK_WIDTH_WORLD, blockY % Chunk.CHUNK_HEIGHT_WORLD, selectedItem.getItemName());
-                            inventory.removeItem(selectedItem.getSlot(), selectedItem); // Removing item from the inventory
-                        }
-                    }
+                    hoveredBlock.parent.placeBlock(hoveredBlock.x, hoveredBlock.y, selectedItem.getItemName());
+
+                    // remove item from the inventory
+                    inventory.removeItem(selectedItem.getSlot(), selectedItem);
                 }
-                // Reset the rightClicked flag after processing
-                inputManager.rightClicked = false;
             }
         }
     }
 
+    public void drawCollidedBlocks(Graphics2D g2d, Block block) {
+        if (canReach) {
+            g2d.setColor(Color.BLUE);
+        } else {
+            g2d.setColor(Color.RED);
+        }
 
+        int blockX = camera.worldXToScreenX(block.getBlockWorldX());
+        int blockY = camera.worldYToScreenY(block.getBlockWorldY());
 
+        g2d.drawRect(blockX, blockY, 1, Block.BLOCK_SIZE);
+        g2d.drawRect(blockX + Block.BLOCK_SIZE, blockY, 1, Block.BLOCK_SIZE);
+
+        g2d.drawRect(blockX, blockY, Block.BLOCK_SIZE, 1);
+        g2d.drawRect(blockX, blockY + Block.BLOCK_SIZE, Block.BLOCK_SIZE, 1);
+    }
 }

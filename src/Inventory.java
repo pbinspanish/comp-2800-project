@@ -19,11 +19,13 @@ public class Inventory extends GameObject implements Serializable {
     private transient InventoryManager inventoryManager;
     private transient int slotSelected;
 
-    public Inventory() {
+    public Inventory(int renderPriority) {
         inventoryManager = new InventoryManager("save1");
         inventoryMap = new HashMap<>();
         loadInventoryImages();
         inventoryMap.putAll(inventoryManager.loadInventory(this).getInventoryMap());
+
+        this.renderPriority = renderPriority;
     }
 
     @Override
