@@ -3,6 +3,7 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Inventory extends GameObject implements Serializable {
     private static final int INVENTORY_SLOT_NUMBER = 9;
@@ -67,32 +68,47 @@ public class Inventory extends GameObject implements Serializable {
                     }
                 }
             }
-        } else {
-            int x = 5;
-            Font originalFont = graphics2D.getFont();
-            Font boldFont = originalFont.deriveFont(Font.BOLD);
-            graphics2D.setFont(boldFont);
+        }  else {
+        int x = 5;
+        Font originalFont = graphics2D.getFont();
+        Font boldFont = originalFont.deriveFont(Font.BOLD);
+        graphics2D.setFont(boldFont);
 
-            for(int i = 0; i < INVENTORY_SLOT_NUMBER; i++){
-                graphics2D.drawImage(inventorySlot, x, INVENTORY_Y, SLOT_SIZE, SLOT_SIZE, null);
-                Item item = inventoryMap.get(i);
-                if (item != null) {
-                    BufferedImage itemImage = item.getItemImage(item.getItemName());
-                    int xOffset = (SLOT_SIZE - itemImage.getWidth()) / 2; // Calculate horizontal offset
-                    int yOffset = (SLOT_SIZE - itemImage.getHeight()) / 2; // Calculate vertical offset
-                    graphics2D.drawImage(itemImage, x + xOffset, INVENTORY_Y + yOffset, null);
-                    int quantity = item.getItemQuantity();
-                    if (quantity >= 1) {
-                        String quantityString = String.valueOf(quantity);
-                        int textX = x + SLOT_SIZE - 5 - graphics2D.getFontMetrics().stringWidth(quantityString);
-                        int textY = INVENTORY_Y + SLOT_SIZE - 5; // Adjust the vertical position as needed
-                        graphics2D.setColor(Color.black);
-                        graphics2D.drawString(quantityString, textX, textY);
-                    }
+        for(int i = 0; i < INVENTORY_SLOT_NUMBER; i++){
+            graphics2D.drawImage(inventorySlot, x, INVENTORY_Y, SLOT_SIZE, SLOT_SIZE, null);
+            Item item = inventoryMap.get(i);
+            Item selectedItem = getSelectedItem();
+            if (item != null) {
+                BufferedImage itemImage = item.getItemImage(item.getItemName());
+
+                int xOffset = (SLOT_SIZE - itemImage.getWidth()) / 2;
+                int yOffset = (SLOT_SIZE - itemImage.getHeight()) / 2;
+
+                int quantity = item.getItemQuantity();
+                String quantityString = String.valueOf(quantity);
+                int textX = x + SLOT_SIZE - 5 - graphics2D.getFontMetrics().stringWidth(quantityString);
+                int textY = INVENTORY_Y + SLOT_SIZE - 5;
+
+                graphics2D.setColor(Color.black);
+
+                // Draw slot outline if selected
+                if(selectedItem != null && Objects.equals(item.getItemName(), selectedItem.getItemName())){
+                    graphics2D.drawImage(inventorySlot, x, INVENTORY_Y, SLOT_SIZE + 5, SLOT_SIZE + 5, null);
+                    // Draw item name under the slot
+                    int itemNameX = x + (SLOT_SIZE - graphics2D.getFontMetrics().stringWidth(item.getItemName())) / 2;
+                    int itemNameY = INVENTORY_Y + SLOT_SIZE + 15;
+                    graphics2D.drawString(item.getItemName(), itemNameX, itemNameY);
                 }
-                x+=SLOT_SIZE;
+                if (quantity >= 1) {
+                    graphics2D.drawString(quantityString, textX, textY);
+                }
+                graphics2D.drawImage(itemImage, x + xOffset, INVENTORY_Y + yOffset, null);
+
+
             }
+            x += SLOT_SIZE;
         }
+    }
     }
 
 

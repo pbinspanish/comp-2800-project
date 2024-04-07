@@ -59,6 +59,7 @@ public class BlockInteractionManager extends GameObject {
 
         // Determine which block in the chunk the mouse is hovered over
         GameObject mouse = new GameObject(mouseWorldX, mouseWorldY, 0, 0);
+        assert blockChunk != null;
         for (Block[] blocks : blockChunk.blocks) {
             for (Block block : blocks) {
                 boolean[] collisions = mouse
