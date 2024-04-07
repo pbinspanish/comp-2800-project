@@ -34,7 +34,7 @@ public class COMP_2800_Project {
             }
             try {
                 // Load sound file using relative path
-                File soundFile = new File("src/resources/" + soundFileName);
+                File soundFile = new File("resources/" + soundFileName);
                 if (!soundFile.exists()) {
                     throw new FileNotFoundException("File not found: " + soundFile.getAbsolutePath());
                 }
