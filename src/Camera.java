@@ -76,7 +76,7 @@ public class Camera extends GameObject {
      * @return The x-coordinate in the world.
      */
     public int screenXToWorldX(int screenX) {
-        return x + this.x;
+        return screenX + this.x - (this.width / 2);
     }
 
     /**
@@ -86,7 +86,7 @@ public class Camera extends GameObject {
      * @return The y-coordinate in the world.
      */
     public int screenYToWorldY(int screenY) {
-        return y + this.y;
+        return screenY + this.y - (this.height / 2);
     }
 
     /**
