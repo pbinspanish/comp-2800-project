@@ -20,7 +20,7 @@ public class Player extends GameObject {
 
     private int dir = 0;
     private int currentFallSpeed = 0;
-    private boolean onGround = false;
+    private boolean onGround = true;
 
     public Player(int x, int y, int renderPriority) {
         super(x, y, PLAYER_WIDTH, PLAYER_HEIGHT, renderPriority);
@@ -45,6 +45,13 @@ public class Player extends GameObject {
             move(0, currentFallSpeed);
         } else {
             currentFallSpeed = 0;
+
+            // test if we're still on the ground
+            int currentY = this.y;
+            move(0, 1);
+            if (this.y != currentY) {
+                onGround = false;
+            }
         }
 
         // move based on the direction and sync with the current input
