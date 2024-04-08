@@ -50,8 +50,7 @@ public class COMP_2800_Project {
 
         // Instructions menu
         String instructions = "1. This is a creative world where you can make your own adventure and fight enemies in the process!\n"
-            + "2. Use your arrow keys to move, space bar to jump, cursor to break blocks and load up your inventory\n"
-            + "3. Don't forget, eliminate your enemies to score points!";
+            + "2. Use your arrow keys to move, space bar to jump, cursor to break blocks and load up your inventory\n";
         JOptionPane.showMessageDialog(frame, instructions, "Instructions", JOptionPane.PLAIN_MESSAGE);
 
         // GameCanvas
